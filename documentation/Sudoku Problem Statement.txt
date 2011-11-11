@@ -1,0 +1,13 @@
+Problem: To develop a Sudoku Game in Java.
+
+Point of the Game:
+
+Game Rules:
+- Player cannot repeat numbers in the same row or the same column
+- Player cannot repeat numbers in the same 3x3 square
+
+Criteria:
+
+Constraints:
+- runs on a 9x9 
+- generates solution answer for each new "game"
