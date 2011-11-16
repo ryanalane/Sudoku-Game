@@ -1,13 +1,16 @@
-Problem: To develop a Sudoku Game in Java.
+Problem: To develop a single-player Sudoku Game in Java.
 
-Point of the Game:
-
-Game Rules:
-- Player cannot repeat numbers in the same row or the same column
-- Player cannot repeat numbers in the same 3x3 square
+Game Rules: See attached file "SudokuGameHelp.pdf"
 
 Criteria:
+- Program should be as responsive as possible, with minimized (if any) waiting time
+- Checking if a given solution is correct or not should appear immediate
+- Source code should be well structured and readable
 
 Constraints:
-- runs on a 9x9 
-- generates solution answer for each new "game"
+- Game runs on a 9x9 board
+- Program generates solution answer for each new "game"
+- Program should allow all *valid* solutions to pass for a given game, even if it is not the exact solution that was generated
+- User should be have to select either a "beginner," "intermediate," or "difficult" difficulty level for each new game
+- User should be able to be shown the solution upon request, effectively ending the current game.
+- User should be able to undo a single move
