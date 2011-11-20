@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,16 +17,22 @@ import javax.swing.JPanel;
 
 import java.net.URL;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 
 public class About extends JPanel {
     private JLabel jLabel1 = new JLabel();
     private JLabel jLabel2 = new JLabel();
     private JLabel jLabel3 = new JLabel();
     private JButton jButtonOK = new JButton();
+    
+    private Icon labelSudokuGridpic = new ImageIcon(getClass().getResource("media/sudokugrid.JPG"));
+    private JLabel jLabel4 = new JLabel();
 
     public About() {
         try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             jbInit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,7 +42,7 @@ public class About extends JPanel {
 
     private void jbInit() throws Exception {
         this.setLayout( null );
-        this.setSize(new Dimension(583, 333));
+        this.setSize(new Dimension(711, 391));
         this.setBackground(new Color(255, 173, 82));
         jLabel1.setText("Sudoku Game");
         jLabel1.setBounds(new Rectangle(25, 20, 140, 35));
@@ -47,12 +54,15 @@ public class About extends JPanel {
         jLabel3.setText("Copyright 2011");
         jLabel3.setBounds(new Rectangle(25, 110, 115, 20));
         jButtonOK.setText("OK");
-        jButtonOK.setBounds(new Rectangle(45, 285, 75, 21));
+        jButtonOK.setBounds(new Rectangle(25, 220, 75, 21));
         jButtonOK.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     jButtonOK_actionPerformed(e);
                 }
             });
+        jLabel4.setBounds(new Rectangle(135, 115, 195, 90));
+        jLabel4.setIcon(labelSudokuGridpic); 
+        this.add(jLabel4, null);
         this.add(jButtonOK, null);
         this.add(jLabel3, null);
         this.add(jLabel2, null);
@@ -67,7 +77,7 @@ public class About extends JPanel {
         }
         );
         
-        URL imgURL = getClass().getResource("icons/keyboard.gif");
+        URL imgURL = getClass().getResource("icons/about.gif");
         SudokuGame.aboutFrame.setIconImage(new ImageIcon(imgURL).getImage());
     }
 

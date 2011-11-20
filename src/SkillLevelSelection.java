@@ -5,9 +5,13 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.net.URL;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.UIManager;
 
 
 public class SkillLevelSelection extends JFrame implements ActionListener {
@@ -16,10 +20,13 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
     private JButton jButton2 = new JButton();
     private JButton jButton3 = new JButton();
     
+    
    public SudokuGame parent;
 
     public SkillLevelSelection(SudokuGame parent) {
+        super("Skill Level Selection");
         try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             jbInit();
             this.parent = parent;
             //this.parent = parent;
@@ -32,23 +39,27 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
         this.getContentPane().setLayout( null );
         this.setSize(new Dimension(273, 193));
         jButton1.setText("Beginner");
-        jButton1.setBounds(new Rectangle(85, 50, 100, 25));
+        jButton1.setBounds(new Rectangle(75, 50, 115, 25));
         jButton1.setBackground(new Color(231, 115, 0));
         jLabel1.setText("Please select a skill level:");
         jLabel1.setBounds(new Rectangle(65, 20, 145, 25));
         jLabel1.setFont(new Font("Tahoma", 0, 14));
+        jButton1.addActionListener(this);
         jButton2.setText("Intermediate");
-        jButton2.setBounds(new Rectangle(85, 80, 100, 25));
+        jButton2.setBounds(new Rectangle(75, 80, 115, 25));
         jButton2.setBackground(new Color(247, 247, 0));
         jButton2.addActionListener(this);
         jButton3.setText("Advanced");
-        jButton3.setBounds(new Rectangle(85, 110, 100, 25));
+        jButton3.setBounds(new Rectangle(75, 110, 115, 25));
         jButton3.setBackground(new Color(0, 181, 0));
         jButton3.addActionListener(this);
         this.getContentPane().add(jButton3, null);
         this.getContentPane().add(jButton2, null);
         this.getContentPane().add(jLabel1, null);
         this.getContentPane().add(jButton1, null);
+        URL imgURL = getClass().getResource("icons/skilllevel.gif"); // DOES NOT APPEAR
+        this.setIconImage(new ImageIcon(imgURL).getImage());
+        
     }
 
     public void actionPerformed(ActionEvent e) {
