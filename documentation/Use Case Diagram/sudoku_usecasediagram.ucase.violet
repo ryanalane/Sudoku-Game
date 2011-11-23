@@ -2,7 +2,7 @@
 <java version="1.6.0_24" class="java.beans.XMLDecoder"> 
  <object class="com.horstmann.violet.UseCaseDiagramGraph"> 
   <void method="addNode"> 
-   <object class="com.horstmann.violet.ActorNode"> 
+   <object id="ActorNode0" class="com.horstmann.violet.ActorNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>HumanPlayer</string> 
@@ -62,7 +62,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode1" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>Exit</string> 
@@ -77,7 +77,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object id="UseCaseNode1" class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode2" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>Select Skill Level</string> 
@@ -92,7 +92,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object id="UseCaseNode2" class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode3" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>Help</string> 
@@ -107,7 +107,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object id="UseCaseNode3" class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode4" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>Help Contents</string> 
@@ -122,7 +122,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object id="UseCaseNode4" class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode5" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>About</string> 
@@ -137,7 +137,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object id="UseCaseNode5" class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode6" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>Set Beginner</string> 
@@ -152,7 +152,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object id="UseCaseNode6" class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode7" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>Set Intermediate</string> 
@@ -167,7 +167,7 @@
    </object> 
   </void> 
   <void method="addNode"> 
-   <object id="UseCaseNode7" class="com.horstmann.violet.UseCaseNode"> 
+   <object id="UseCaseNode8" class="com.horstmann.violet.UseCaseNode"> 
     <void property="name"> 
      <void property="text"> 
       <string>Set Advanced</string> 
@@ -188,34 +188,7 @@
     </void> 
    </object> 
    <object idref="UseCaseNode0"/> 
-   <object idref="UseCaseNode1"/> 
-  </void> 
-  <void method="connect"> 
-   <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
-    <void property="endArrowHead"> 
-     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
-    </void> 
-   </object> 
-   <object idref="UseCaseNode1"/> 
-   <object idref="UseCaseNode6"/> 
-  </void> 
-  <void method="connect"> 
-   <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
-    <void property="endArrowHead"> 
-     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
-    </void> 
-   </object> 
-   <object idref="UseCaseNode1"/> 
-   <object idref="UseCaseNode7"/> 
-  </void> 
-  <void method="connect"> 
-   <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
-    <void property="endArrowHead"> 
-     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
-    </void> 
-   </object> 
-   <object idref="UseCaseNode1"/> 
-   <object idref="UseCaseNode5"/> 
+   <object idref="UseCaseNode2"/> 
   </void> 
   <void method="connect"> 
    <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
@@ -224,7 +197,25 @@
     </void> 
    </object> 
    <object idref="UseCaseNode2"/> 
-   <object idref="UseCaseNode3"/> 
+   <object idref="UseCaseNode7"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="UseCaseNode2"/> 
+   <object idref="UseCaseNode8"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="UseCaseNode2"/> 
+   <object idref="UseCaseNode6"/> 
   </void> 
   <void method="connect"> 
    <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
@@ -234,6 +225,25 @@
    </object> 
    <object idref="UseCaseNode3"/> 
    <object idref="UseCaseNode4"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge"> 
+    <void property="endArrowHead"> 
+     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/> 
+    </void> 
+   </object> 
+   <object idref="UseCaseNode4"/> 
+   <object idref="UseCaseNode5"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge"/> 
+   <object idref="ActorNode0"/> 
+   <object idref="UseCaseNode1"/> 
+  </void> 
+  <void method="connect"> 
+   <object class="com.horstmann.violet.UseCaseRelationshipEdge"/> 
+   <object idref="UseCaseNode0"/> 
+   <object idref="ActorNode0"/> 
   </void> 
  </object> 
 </java> 

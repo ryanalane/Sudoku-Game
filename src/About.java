@@ -1,4 +1,3 @@
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -67,11 +66,11 @@ public class About extends JPanel {
         this.add(jLabel3, null);
         this.add(jLabel2, null);
         this.add(jLabel1, null);
-        
+
         SudokuGame.aboutFrame.addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e)
                 {
-                        SudokuGame.unsetAboutExists();
+                    SudokuGame.unsetAboutExists();
                         System.out.println("About Closed");
                 }
         }
@@ -84,27 +83,27 @@ public class About extends JPanel {
    
     
     public static void createAndShowGUI() {
-          
-          SudokuGame.aboutFrame = new JFrame("About");
-          SudokuGame.aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        SudokuGame.aboutFrame = new JFrame("About");
+        SudokuGame.aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
           
           // Create an instance of the panel, which is this class itself
           About panelInstance = new About();
           
           // Set up the panel instance you just created as the contents of the JFrame
           // that was created (addCDsAndDVDsToCollection) in main screen:
-          SudokuGame.aboutFrame.setContentPane(panelInstance);
-          
-                      SudokuGame.aboutFrame.setResizable(false);
-                      SudokuGame.aboutFrame.setLocationRelativeTo(null);
-                      SudokuGame.aboutFrame.setSize(325,300);
-                      SudokuGame.aboutFrame.setVisible(true);
+        SudokuGame.aboutFrame.setContentPane(panelInstance);
+
+        SudokuGame.aboutFrame.setResizable(false);
+        SudokuGame.aboutFrame.setLocationRelativeTo(null);
+        SudokuGame.aboutFrame.setSize(325,300);
+        SudokuGame.aboutFrame.setVisible(true);
                       }
 
 
 
         private void jButtonOK_actionPerformed(ActionEvent e) {
-            SudokuGame.aboutFrame.dispose();
+        SudokuGame.aboutFrame.dispose();
         }
  
   	

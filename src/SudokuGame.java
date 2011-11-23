@@ -23,6 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import java.net.URL;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+
 
 public class SudokuGame extends JFrame {
     
@@ -52,6 +56,7 @@ public class SudokuGame extends JFrame {
     URL imgURL = getClass().getResource("icons/sudoku.gif");
     
     
+    
     // Add array of buttons to class
     private JButton[] btnarray = new JButton[81];
     
@@ -60,13 +65,22 @@ public class SudokuGame extends JFrame {
     private ButtonListener buttonListener = new ButtonListener();
     
     private final int NUM_IN_A_ROW=9;
+    private final int NUM_OF_BUTTONS = 81;
     
     private int rowNumberAccessed;
     private int colNumberAccessed;
     private String numberUserEntered;
     private int buttonNumberPushed;
+    int[][] currentArrayOfNumbers = new int[rowNumberAccessed][colNumberAccessed];
+   // int[][] solutionIntArray = new int[rowNumberAccessed][colNumberAccessed]; -- when randomPuzzle solutions are added
     
     
+    
+    
+    
+    
+    //properties for File I/O
+    private String currentlyLoadedFilePath = "";
 
     public SudokuGame() {
         try {
@@ -165,20 +179,7 @@ public class SudokuGame extends JFrame {
     // I put this in manually to make it runnable and system look and feel:   ******************************
     public static void main(String[] args) {
         SudokuGame sudokuGame = new SudokuGame();
-        /*
-                  SplashScreen splashScreen = new SplashScreen(sudokuGame);
-                        //splashScreen.setVisible(true);
-                        
-                          //      try  // delay program execution  5000 milliseconds *****************
-                            //    {
-                            //    Thread.sleep(5000);
-                           //     }
-                                catch(Exception ex)
-                           //     {}
-                                
-                      //  splashScreen.setVisible(false);
-                      //  sudokuGame.setVisible(true);
-         */
+        
                 
         sudokuGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         sudokuGame.getContentPane().setBackground(Color.GREEN);
@@ -192,6 +193,7 @@ public class SudokuGame extends JFrame {
         skillLevelSelection.setLocationRelativeTo(null);
         skillLevelSelection.setVisible(true);
         
+        
     }
     
     // *********************************************************************************
@@ -202,7 +204,10 @@ public class SudokuGame extends JFrame {
         skillLevelSelection.setAlwaysOnTop(true);
         skillLevelSelection.setLocationRelativeTo(null);
         skillLevelSelection.setVisible(true); 
+        
+        
         System.out.println("New game clicked");
+        
         
     }
     
@@ -247,10 +252,12 @@ public class SudokuGame extends JFrame {
     }
     void saveGame_ActionPerformed(ActionEvent e) {
         //filechooser stuff -- Need Functionality class before I can do this
-        
+        //save data into array
     }
     
     void fileExit_ActionPerformed(ActionEvent e) {
+       // JOptionPane.showMessageDialog("Are you sure you want to exit?");
+        
         System.exit(0);
     }
 
@@ -259,7 +266,7 @@ public class SudokuGame extends JFrame {
         if (aboutExists == false) {
                             aboutExists = true;
                             System.out.println("About Opened");
-                            About.createAndShowGUI();
+            About.createAndShowGUI();
                         } else {
                             aboutFrame.toFront();
                         }
@@ -295,17 +302,51 @@ public class SudokuGame extends JFrame {
         String command = e.getActionCommand(); {
             if (e.getActionCommand().equals("Undo")) 
             {
+             //if no previous values were entered in individual button:
+                btnarray[buttonNumberPushed].setText("");
+                
+                
+                /*
+                
+                ArrayList numbersCurrentlyEntered = new ArrayList();
+                 int num = Integer.parseInt(numberUserEntered);       
+                for (int i = 0; i<numbersCurrentlyEntered.size(); i++)
+                {
+                    numbersCurrentlyEntered.add(numberUserEntered);
+                    System.out.println(numberUserEntered); 
+                }
+                        
+                ListIterator<String> itr = numbersCurrentlyEntered.listIterator();
+                    while (itr.hasPrevious()) {
+                      String element = itr.previous();
+                      System.out.print(element + " ");
+                        btnarray[buttonNumberPushed].setText((itr.previous()));
+                        //set to previous value 
+                        System.out.print("element has been set to previous value" + itr.previous());
+                       
+                    }
+                */ 
                 System.out.println("Undo button clicked");
             }
             else if (e.getActionCommand().equals("Reset")) {
+                /*
+                for (int i = 0; i<btnarray.length; i++)
+                {
+                
+                }
+*/
+                //set the buttons back to the array that was original loaded (see generateGrid() method)
                 System.out.println("Reset button clicked");
             }
             else if (e.getActionCommand().equals("Check Solution")) 
             {
+                
                 System.out.println("Check solution clicked");
             }
              else if (e.getActionCommand().equals("Show Solution")) 
             {
+                //calls showSolution method
+                
             System.out.println("Show solution clicked");
             }
     }
@@ -331,7 +372,8 @@ public class SudokuGame extends JFrame {
             // Determine the button number from the buttonCoordinatesString:
             for (int i=0; i<buttonCoordinatesInPanelArray.length;i++){
                 if(buttonCoordinatesInPanelArray[i].equals(buttonCoordinatesString))
-                    buttonNumberPushed = i;  // Starting with 1 on button number
+                    buttonNumberPushed = i; // Starting with 1 on button number
+                    btnarray[buttonNumberPushed].setBackground(Color.CYAN);
                     
             }
               
@@ -409,19 +451,19 @@ public class SudokuGame extends JFrame {
                                 String n = numberUserEntered;
                                 n = Character.toString(c);
                                 System.out.println(n);
-                                btnarray[buttonNumberPushed].setBackground(Color.CYAN); 
                                 btnarray[buttonNumberPushed].setForeground(Color.BLUE); 
                                 btnarray[buttonNumberPushed].setText(String.valueOf(n));
                                 int numberEntered = Integer.parseInt(n);       
-                                int[][] currentArrayOfNumbers = new int[rowNumberAccessed][colNumberAccessed];
+                                //int[][] currentArrayOfNumbers = new int[rowNumberAccessed][colNumberAccessed];
                                 for (int i = 0; i<currentArrayOfNumbers.length; i++) {
-                                    for (int j = 0; j<currentArrayOfNumbers.length; i++) {
-                
+                                    for (int j = 0; j<currentArrayOfNumbers[i].length; i++) {
+                                        
                                         currentArrayOfNumbers[i][j] = numberEntered;
+                                        System.out.println(numberEntered); // to be deleted
                                     }
                                 
                                 }
-                                
+                                btnarray[buttonNumberPushed].setBackground(Color.WHITE); 
                 
                             }
             /*if (c==0) {
@@ -465,8 +507,15 @@ public class SudokuGame extends JFrame {
                             
                     }
             }
+    
+   
+    
+   
+    
+   
+    
+    
 }
     
 //CREATE AN INTEGER ARRAY THAT IS A COPY OF THE BUTTON ARRAY TO STORE THE INPUTTED VALUES/FUNCTIONALITY STUFF
-//create method that will run through buttons (i.e. button[i]) -- does setText on it... button[i].setText... loads something in array of integers
-//need a solutionIntArray and array of the current number(s) in the array
+
