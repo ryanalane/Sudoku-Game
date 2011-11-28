@@ -1,27 +1,14 @@
+//Packages that need to be imported into the program
 import java.awt.event.*;
-
 import javax.swing.*;
-
 import java.awt.*;
-
 import java.io.*;
-
-import java.awt.datatransfer.*;
-
 import javax.swing.text.*;
-
 import java.util.Scanner;
-
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-
-import javax.swing.text.StyledEditorKit.*;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -30,16 +17,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 
 
-public class SudokuGame extends JFrame {
 
+public class SudokuGame extends JFrame {
+    //Creating class level variables (properties) for use by all methods in this class
     private JMenuBar menuBar = new JMenuBar();
     private JMenu menuFile = new JMenu();
     private JMenuItem menuNewGame = new JMenuItem();
@@ -49,45 +35,41 @@ public class SudokuGame extends JFrame {
     private JMenu menuHelp = new JMenu();
     private JMenuItem menuHelpAbout = new JMenuItem();
     private JMenuItem menuHelpContents = new JMenuItem();
-    private JButton jButton3 = new JButton();
-    private JButton jButton4 = new JButton();
-    private JButton jButton5 = new JButton();
-    private JButton jButton6 = new JButton();
-
+    private JButton jButtonUndo = new JButton();
+    private JButton jButtonReset = new JButton();
+    private JButton jButtonCheckSolution = new JButton();
+    private JButton jButtonShowSolution = new JButton();
     private JPanel jPanel1 = new JPanel();
-
     private int levelSelected;
     public static SkillLevelSelection skillLevelSelection;
-
-
     public static JFrame aboutFrame;
     private static boolean aboutExists = false;
-
+    //Icon for main class
     URL imgURL = getClass().getResource("icons/sudoku.gif");
-
 
     // Add array of buttons to class
     private JButton[] btnarray = new JButton[81];
-
-    private ArrayButtonListener arrayButtonListener =
-        new ArrayButtonListener();
+    
+    //ButtonListener and KeyListener instances:
+    private ArrayButtonListener arrayButtonListener = new ArrayButtonListener();
     private MyKeyListener myKeyListener = new MyKeyListener();
     private ButtonListener buttonListener = new ButtonListener();
-
+    
+    //Constants
     private final int NUM_IN_A_ROW = 9;
     private final int NUM_IN_A_COLUMN = 9;
     private final int NUM_OF_BUTTONS = 81;
-
+    
+    //ints and Strings used for accessing information about buttons in array
     private int rowNumberAccessed;
     private int colNumberAccessed;
     private String numberUserEntered;
     private int buttonNumberPushed;
     
+    //Creating various arrays to be used throughout the main class
+    
     int[][] currentArrayOfNumbers = new int[NUM_IN_A_ROW][NUM_IN_A_COLUMN];
-    
-    
-    
-    // int[][] solutionIntArray = new int[rowNumberAccessed][colNumberAccessed]; -- when randomPuzzle solutions are added
+     // int[][] solutionIntArray = new int[rowNumberAccessed][colNumberAccessed]; -- when randomPuzzle solutions are added
     int[][] solutionIntArray =
     { { 3, 9, 8, 4, 1, 5, 2, 7, 6 }, { 1, 2, 4, 3, 6, 7, 5, 8, 9 },
       { 5, 6, 7, 2, 8, 9, 1, 3, 4 }, { 7, 1, 2, 5, 3, 4, 6, 9, 8 },
@@ -95,13 +77,16 @@ public class SudokuGame extends JFrame {
       { 4, 7, 1, 8, 2, 6, 9, 5, 3 }, { 2, 8, 6, 9, 5, 3, 7, 4, 1 },
       { 9, 5, 3, 7, 4, 1, 8, 6, 2 } }; // - temporary, to be deleted
 
+    //Arraylist to be used for values that are omitted in puzzles
     ArrayList<Integer> skippedValues = new ArrayList<Integer>();
     
+    //Boolean used to control whether the solution is shown or not
     boolean solutionShowed = false;
-
-    //properties for File I/O
-    private String currentlyLoadedFilePath = "";
-
+    
+    // ArrayList for holding a list of data records:
+    private ArrayList<SavedDataRecord> savedDataObjectsList = new ArrayList<SavedDataRecord>();
+    private boolean lastButtonPushedWasSave = false;
+    
     public SudokuGame() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -158,23 +143,23 @@ public class SudokuGame extends JFrame {
 
         //Modify for other menus -- menuHelpAbout.addActionListener( new ActionListener() { public void actionPerformed( ActionEvent ae ) { helpAbout_ActionPerformed( ae ); } } );
 
-        jButton3.setText("Undo");
-        jButton3.setBounds(new Rectangle(175, 330, 75, 21));
-        jButton3.addActionListener(buttonListener);
-        jButton3.setBackground(new Color(0, 214, 214));
-        jButton4.setText("Reset");
-        jButton4.setBounds(new Rectangle(315, 330, 75, 21));
-        jButton4.setBackground(new Color(0, 214, 214));
-        jButton4.addActionListener(buttonListener);
-        jButton5.setText("Check Solution");
-        jButton5.setBounds(new Rectangle(150, 360, 125, 20));
-        jButton5.setBackground(new Color(0, 214, 214));
-        jButton5.addActionListener(buttonListener);
-        jButton6.setText("Show Solution");
-        jButton6.setBounds(new Rectangle(295, 360, 120, 20));
-        jButton6.addActionListener(buttonListener);
+        jButtonUndo.setText("Undo");
+        jButtonUndo.setBounds(new Rectangle(175, 330, 75, 21));
+        jButtonUndo.addActionListener(buttonListener);
+        jButtonUndo.setBackground(new Color(0, 214, 214));
+        jButtonReset.setText("Reset");
+        jButtonReset.setBounds(new Rectangle(315, 330, 75, 21));
+        jButtonReset.setBackground(new Color(0, 214, 214));
+        jButtonReset.addActionListener(buttonListener);
+        jButtonCheckSolution.setText("Check Solution");
+        jButtonCheckSolution.setBounds(new Rectangle(150, 360, 125, 20));
+        jButtonCheckSolution.setBackground(new Color(0, 214, 214));
+        jButtonCheckSolution.addActionListener(buttonListener);
+        jButtonShowSolution.setText("Show Solution");
+        jButtonShowSolution.setBounds(new Rectangle(295, 360, 120, 20));
+        jButtonShowSolution.addActionListener(buttonListener);
 
-        jButton6.setBackground(new Color(0, 214, 214));
+        jButtonShowSolution.setBackground(new Color(0, 214, 214));
         jPanel1.setBounds(new Rectangle(85, 15, 425, 300));
         menuFile.add(menuNewGame);
         menuFile.add(menuLoadGame);
@@ -187,13 +172,13 @@ public class SudokuGame extends JFrame {
 
 
         // Setting a grid layout to the JPanel )Layout manager has to be defined)
-        this.getContentPane().add(jButton6, null);
-        this.getContentPane().add(jButton5, null);
-        this.getContentPane().add(jButton4, null);
-        this.getContentPane().add(jButton3, null);
+        this.getContentPane().add(jButtonShowSolution, null);
+        this.getContentPane().add(jButtonCheckSolution, null);
+        this.getContentPane().add(jButtonReset, null);
+        this.getContentPane().add(jButtonUndo, null);
         this.getContentPane().add(jPanel1, null);
-        this.getContentPane().add(jButton6, null);
-        this.getContentPane().add(jButton5, null);
+        this.getContentPane().add(jButtonShowSolution, null);
+        this.getContentPane().add(jButtonCheckSolution, null);
         jPanel1.setLayout(new GridLayout(9, 9));
 
         jPanel1.setBackground(Color.white);
@@ -204,9 +189,13 @@ public class SudokuGame extends JFrame {
             btnarray[i].addActionListener(arrayButtonListener);
             btnarray[i].addKeyListener(myKeyListener);
             jPanel1.add(btnarray[i]);
+            Font font = new Font("Arial", Font.BOLD, 16);
+            btnarray[i].setFont(font);
+            
+            
         }
 
-
+        
     }
 
     public static void unsetAboutExists() {
@@ -224,7 +213,7 @@ public class SudokuGame extends JFrame {
     public static void main(String[] args) {
         SudokuGame sudokuGame = new SudokuGame();
         sudokuGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        sudokuGame.getContentPane().setBackground(Color.GREEN);
+        sudokuGame.getContentPane().setBackground(new Color(0x00, 0xFF, 0x00));
         sudokuGame.setLocationRelativeTo(null);
         sudokuGame.setResizable(false);
         sudokuGame.setVisible(true);    
@@ -246,55 +235,14 @@ public class SudokuGame extends JFrame {
     }
 
     void loadGame_ActionPerformed(ActionEvent e) {
-        //filechooser stuff -- Need Functionality class before I can do this
-
-        /*
-        JFileChooser jfc = new JFileChooser();
-        try
-        {
-                File f = new File(new File(".").getCanonicalPath());
-                jfc.setCurrentDirectory(f);
-
-                }
-                catch (IOException except)
-                {
-                        System.out.println("Unable to set current directory!");
-                }
-
-                jfc.setFileFilter(new TextFileFilter());
-                int result = jfc.showOpenDialog(this);
-                if(result == JFileChooser.CANCEL_OPTION) return;
-
-                try{
-                        File file = jfc.getSelectedFile();
-                        currentlyLoadedFilePath = file.getPath();
-
-                        boolean ranSuccessfully = functionality.loadDataFromInputFile(file); //need to get functionality stuff first
-                        jPanel1.setText(functionality.loadTextFromFile(file));
-                        if (ranSuccessfully == true)
-                        JOptionPane.showMessageDialog(null, "Text file successfully opened." , "Loading Data" , JOptionPane.INFORMATION_MESSAGE);
-
-                }
-                catch (Exception ex)
-                {
-                        JOptionPane.showMessageDialog(null, "Failure to open text file." , "Loading Data" , JOptionPane.WARNING_MESSAGE);
-
-
-    }
-    */
         System.out.println("Load game clicked");
     }
 
     void saveGame_ActionPerformed(ActionEvent e) {
-        
-           
-        //filechooser stuff -- Need Functionality class before I can do this
-        //save data into array
+        System.out.println("Save game clicked");
     }
 
-    void fileExit_ActionPerformed(ActionEvent e) {
-        // JOptionPane.showMessageDialog("Are you sure you want to exit?");
-        
+    void fileExit_ActionPerformed(ActionEvent e) {     
         System.exit(0);
     }
 
@@ -335,8 +283,28 @@ public class SudokuGame extends JFrame {
             String command = e.getActionCommand();
             {
                 if (e.getActionCommand().equals("Undo")) {
-                    //if no previous values were entered in individual button:
-                    btnarray[buttonNumberPushed].setText("");
+                    try{
+                    
+                        if (lastButtonPushedWasSave){ 
+                            savedDataObjectsList.remove(savedDataObjectsList.size()-1);   // remove the last record from list first, last saved record is always the same as current record
+                        }
+                    
+                    int lastSavedNumber =  savedDataObjectsList.get(savedDataObjectsList.size()-1).getIntegerData();
+                    
+                    savedDataObjectsList.remove(savedDataObjectsList.size()-1);   // remove the last record from list
+                    
+                    // update the GUI with the retrieved data:
+                    btnarray[buttonNumberPushed].setText(String.valueOf(lastSavedNumber));
+                    
+                        lastButtonPushedWasSave = false;
+                    }
+                    catch (Exception exe){
+                        
+                        System.out.println("The arraylist has no more elements");
+                        JOptionPane.showMessageDialog(null, "You have reached your first entry." , "Unable to Load Data" , JOptionPane.WARNING_MESSAGE);
+                    }
+                    
+                    
                     
                     System.out.println("Undo button clicked");
                 } else if (e.getActionCommand().equals("Reset"))
@@ -375,7 +343,7 @@ public class SudokuGame extends JFrame {
                     solutionShowed = true;
                     showSolution();
                     System.out.println("Show solution clicked");
-                    jButton6.setText("Hide Solution");
+                    jButtonShowSolution.setText("Hide Solution");
                     
                     
                     
@@ -398,7 +366,7 @@ public class SudokuGame extends JFrame {
         }
                         
                         System.out.println("Hide solution clicked");
-                        jButton6.setText("Show Solution");
+                        jButtonShowSolution.setText("Show Solution");
                     }
             }
         }
@@ -440,9 +408,10 @@ public class SudokuGame extends JFrame {
             for (int i = 0; i < buttonCoordinatesInPanelArray.length; i++) {
                 if (buttonCoordinatesInPanelArray[i].equals(buttonCoordinatesString))
                     buttonNumberPushed = i; // Starting with 1 on button number
+                   
             }
 
-            btnarray[buttonNumberPushed].setBackground(Color.CYAN);
+            btnarray[buttonNumberPushed].setBackground(new Color(0x00, 0xFF, 0xFF));
             System.out.println("buttonNumberPushed: " + buttonNumberPushed);
 
 
@@ -522,11 +491,24 @@ public class SudokuGame extends JFrame {
                 String n = numberUserEntered;
                 n = Character.toString(c);
                 System.out.println(n);
-                btnarray[buttonNumberPushed].setForeground(Color.MAGENTA);
+                btnarray[buttonNumberPushed].setForeground(new Color(0xB2, 0x22, 0x22));
                 btnarray[buttonNumberPushed].setText(String.valueOf(n));
                 int numberEntered = Integer.parseInt(n);     
                 currentArrayOfNumbers[rowNumberAccessed][colNumberAccessed] = numberEntered;
-                btnarray[buttonNumberPushed].setBackground(Color.GRAY);
+                btnarray[buttonNumberPushed].setBackground(new Color(0xD3, 0xD3, 0xD3));
+            try{
+                    // Create a new instance of data record:
+                
+                    SavedDataRecord savedDataRecord = new SavedDataRecord(numberEntered, rowNumberAccessed, colNumberAccessed, buttonNumberPushed);
+                    
+                    savedDataObjectsList.add(savedDataRecord);
+                
+                    lastButtonPushedWasSave = true;
+                }
+                    catch (Exception ex){
+                        System.out.println("Incorrect Data, Unable to Save");
+                    JOptionPane.showMessageDialog(null, "Incorrect Data, Unable to Save" , "Unable to Save Data" , JOptionPane.WARNING_MESSAGE);
+                }
 
         }
 
@@ -703,6 +685,59 @@ public class SudokuGame extends JFrame {
         skippedValues.add(Integer.valueOf(79));
         skippedValues.add(Integer.valueOf(80));
 
+    }
+    // Inner class saved data record:
+    private class SavedDataRecord {
+        
+        private int integerData;
+        private int xCoordinateOfButton;
+        private int yCoordinateOfButton;
+        private int buttonNumber;
+        
+        
+        // Costructor for setting the fields for inner class:
+        SavedDataRecord(int integerD, int xCoordinate, int yCoordinate, int buttonNum){
+            integerData = integerD;
+            xCoordinateOfButton = xCoordinate;
+            yCoordinateOfButton = yCoordinate;
+            buttonNumber = buttonNum;
+        }
+
+
+        // Accessors for inner class fields:
+        public void setIntegerData(int integerD) {
+            integerData = integerD;
+        }
+
+        public int getIntegerData() {
+            return integerData;
+        }
+        
+        public void setXCoordinateOfButton (int xCoordinate) {
+            xCoordinateOfButton = xCoordinate;
+        }
+
+        public int getXCoordinateOfButton() {
+            return xCoordinateOfButton;
+        }
+        
+        public void setYCoordinateOfButton (int yCoordinate) {
+            yCoordinateOfButton = yCoordinate;
+        }
+
+        public int getYCoordinateOfButton() {
+            return yCoordinateOfButton;
+        }
+        
+        public void setButtonNumber (int buttonNum) {
+            buttonNumber = buttonNum;
+        }
+
+        public int getButtonNumber() {
+            return buttonNumber;
+        }
+    
+        
     }
 }
     
