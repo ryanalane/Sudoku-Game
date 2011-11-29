@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-
-
 public class SudokuGame extends JFrame {
     //Creating class level variables (properties) for use by all methods in this class
     private JMenuBar menuBar = new JMenuBar();
@@ -217,8 +215,7 @@ public class SudokuGame extends JFrame {
         sudokuGame.getContentPane().setBackground(new Color(0x00, 0xFF, 0x00));
         sudokuGame.setLocationRelativeTo(null);
         sudokuGame.setResizable(false);
-        sudokuGame.setVisible(true);    
-
+        sudokuGame.setVisible(true);
     }
     void newGame_ActionPerformed(ActionEvent e) {
         

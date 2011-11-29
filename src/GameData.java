@@ -6,7 +6,7 @@ public class GameData {
 	private int difficulty_level_id = 0;
 	private int[] generated_solution;
 	private ArrayList<Integer> given_squares;
-	private SquareData[] squares;
+	private SquareData[] squares = new SquareData[81];
 	
 	// GameData Methods
 	public boolean getHasDuplicates() {
@@ -38,6 +38,12 @@ public class GameData {
 	}
 	public void resetGivenSquares() {
 		given_squares.clear();
+	}
+	public SquareData[] getSquares() {
+		return squares;
+	}
+	public SquareData getSquare(int square_id) {
+		return squares[square_id];
 	}
 	public String getDifficultyLevel() {
 		return difficulty_levels[getDifficultyLevelId()];
