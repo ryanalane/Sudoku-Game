@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class SquareData {
-	private int id;
+	private int id = -1;
 	private ArrayList<Integer> duplicate_ids;
 	private int value = 0;
 	private boolean given = false;
@@ -40,7 +40,6 @@ public class SquareData {
 		return are_there_duplicates;
 	}
 	SquareData() {
-		setId(-1);
 		duplicate_ids = new ArrayList<Integer>();
 	}
 	SquareData(int new_id) {

@@ -45,4 +45,13 @@ public class GameData {
 	public void generateSolution(int desired_difficulty_level_id) {
 		
 	}
+	GameData() {
+		given_squares = new ArrayList<Integer>();
+		for(int i = 0; i < 81; ++i)
+			squares[i] = new SquareData(i);
+	}
+	GameData(int new_difficulty_level_id) {
+		setDifficultyLevelId(new_difficulty_level_id);
+		generateSolution(getDifficultyLevelId());
+	}
 }
