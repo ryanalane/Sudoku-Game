@@ -70,13 +70,14 @@ public class SudokuGame extends JFrame {
     
     int[][] currentArrayOfNumbers = new int[NUM_IN_A_ROW][NUM_IN_A_COLUMN];
      // int[][] solutionIntArray = new int[rowNumberAccessed][colNumberAccessed]; -- when randomPuzzle solutions are added
+    /*
     int[][] solutionIntArray =
     { { 3, 9, 8, 4, 1, 5, 2, 7, 6 }, { 1, 2, 4, 3, 6, 7, 5, 8, 9 },
       { 5, 6, 7, 2, 8, 9, 1, 3, 4 }, { 7, 1, 2, 5, 3, 4, 6, 9, 8 },
       { 6, 3, 5, 1, 9, 8, 4, 2, 7 }, { 8, 4, 9, 6, 7, 2, 3, 1, 5 },
       { 4, 7, 1, 8, 2, 6, 9, 5, 3 }, { 2, 8, 6, 9, 5, 3, 7, 4, 1 },
       { 9, 5, 3, 7, 4, 1, 8, 6, 2 } }; // - temporary, to be deleted
-
+	*/
     //Arraylist to be used for values that are omitted in puzzles
     ArrayList<Integer> skippedValues = new ArrayList<Integer>();
     
@@ -543,29 +544,25 @@ public class SudokuGame extends JFrame {
 
     private void showSolution() {
         int currentButtonNumber = 0;
-
-        for (int i = 0; i < solutionIntArray.length; i++) {
-            for (int j = 0; j < solutionIntArray[i].length; j++) {
-                currentButtonNumber = (9 * (i) + j);
-                btnarray[currentButtonNumber].setText(String.valueOf(solutionIntArray[i][j]));
-
-            }
+        int[] solution = current_game.getSolution();
+        for (int i = 0; i < 81; i++) {
+        	btnarray[i].setText(String.valueOf(solution[i]));
         }
 
 
     }
 
     private void checkSolution() {
-    boolean misMatch = false;
-    
-        for (int i = 0; i < currentArrayOfNumbers.length; i++) {
-            for (int j = 0; j < currentArrayOfNumbers[i].length; j++) {
-                if (currentArrayOfNumbers[i][j] != solutionIntArray[i][j]) 
-                    misMatch = true;
-                else
-                    misMatch = false;
-                    
-            }
+    	boolean misMatch = false;
+    	int[] solution = current_game.getSolution();
+        
+        for (int i = 0; i < 81; i++) {
+        	int row_id = SquareData.getRowId(i);
+        	int col_id = SquareData.getColId(i);
+            if (currentArrayOfNumbers[row_id][col_id] != solution[i]) 
+            	misMatch = true;
+            else
+            	misMatch = false;
         }
         
        if (misMatch == true) {
@@ -587,25 +584,21 @@ public class SudokuGame extends JFrame {
 
     private void createNewPuzzle() {
         current_game.generateNewSolution();
-    	int currentButtonNumber = 0;
         ArrayList<Integer> given_values = current_game.getGivenValues();
         int[] solution = current_game.getSolution();
-        
 
         for (int i = 0; i < 81; i++) {
                 int row_id = SquareData.getRowId(i);
                 int col_id = SquareData.getColId(i);
-                currentButtonNumber=i+1;
                 
-               if (given_values.contains(currentButtonNumber)) {
-            	   btnarray[currentButtonNumber].setText(String.valueOf(solution[i]));
+               if (given_values.contains(i)) {
+            	   btnarray[i].setText(String.valueOf(solution[i]));
                    currentArrayOfNumbers[row_id][col_id] = solution[i];
                } else {
             	   currentArrayOfNumbers[row_id][col_id] = 0;
-                   btnarray[currentButtonNumber].setText("");
+                   btnarray[i].setText("");
                }   
         }
-        
     } 
         
     
