@@ -26,7 +26,7 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
     public SkillLevelSelection(SudokuGame parent) {
         super("Skill Level Selection");
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             jbInit();
             this.parent = parent;
             //this.parent = parent;

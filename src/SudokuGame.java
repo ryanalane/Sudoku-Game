@@ -23,7 +23,9 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 public class SudokuGame extends JFrame {
-    //Creating class level variables (properties) for use by all methods in this class
+	private GameData current_game = new GameData(0);
+	
+	//Creating class level variables (properties) for use by all methods in this class
     private JMenuBar menuBar = new JMenuBar();
     private JMenu menuFile = new JMenu();
     private JMenuItem menuNewGame = new JMenuItem();
@@ -181,7 +183,7 @@ public class SudokuGame extends JFrame {
         jPanel1.setLayout(new GridLayout(9, 9));
 
         jPanel1.setBackground(Color.white);
-        this.setIconImage(new ImageIcon(imgURL).getImage());
+        //this.setIconImage(new ImageIcon(imgURL).getImage());
 
         for (int i = 0; i < 81; i++) {
             btnarray[i] = new JButton();
@@ -584,43 +586,24 @@ public class SudokuGame extends JFrame {
 
 
     private void createNewPuzzle() {
-        int currentButtonNumber = 0;
-        boolean foundValueInSkippedValues = false;
-        loadSkippedValues();
-        
+        current_game.generateNewSolution();
+    	int currentButtonNumber = 0;
+        ArrayList<Integer> given_values = current_game.getGivenValues();
+        int[] solution = current_game.getSolution();
         
 
-        for (int i = 0; i < solutionIntArray.length; i++) {
-            
-            for (int j = 0; j < solutionIntArray[i].length; j++) {
+        for (int i = 0; i < 81; i++) {
+                int row_id = SquareData.getRowId(i);
+                int col_id = SquareData.getColId(i);
+                currentButtonNumber=i+1;
                 
-                currentButtonNumber=((NUM_IN_A_ROW *i)+j);
-                
-               if (skippedValues.contains(Integer.valueOf(currentButtonNumber))) {
-               
-                   foundValueInSkippedValues = true;
-                }
-                
-                
-                
-                
-                if (foundValueInSkippedValues == false)
-                {
-                    
-                    btnarray[currentButtonNumber].setText(String.valueOf(solutionIntArray[i][j]));
-                    currentArrayOfNumbers[i][j] = solutionIntArray[i][j]; 
-               }
-                
-                
-                
-                
-                else {
-                    currentArrayOfNumbers[i][j] = 0;
-                    btnarray[currentButtonNumber].setText("");
-                    foundValueInSkippedValues = false;
-                }  
-                }
-            
+               if (given_values.contains(currentButtonNumber)) {
+            	   btnarray[currentButtonNumber].setText(String.valueOf(solution[i]));
+                   currentArrayOfNumbers[row_id][col_id] = solution[i];
+               } else {
+            	   currentArrayOfNumbers[row_id][col_id] = 0;
+                   btnarray[currentButtonNumber].setText("");
+               }   
         }
         
     } 
