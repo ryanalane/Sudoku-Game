@@ -432,7 +432,6 @@ public class SudokuGame extends JFrame {
                         break;
                     }
                     countCycles++;
-
                 }
             }
 
@@ -540,44 +539,28 @@ public class SudokuGame extends JFrame {
     }
 
     private void showSolution() {
-        int currentButtonNumber = 0;
         int[] solution = current_game.getSolution();
         for (int i = 0; i < 81; i++) {
         	btnarray[i].setText(String.valueOf(solution[i]));
         }
-
-
     }
 
     private void checkSolution() {
-    	boolean misMatch = false;
+    	boolean solved = true;
     	int[] solution = current_game.getSolution();
-        
         for (int i = 0; i < 81; i++) {
         	int row_id = SquareData.getRowId(i);
         	int col_id = SquareData.getColId(i);
-            if (currentArrayOfNumbers[row_id][col_id] != solution[i]) 
-            	misMatch = true;
-            else
-            	misMatch = false;
+            if (currentArrayOfNumbers[row_id][col_id] != solution[i]) {
+            	solved = false;
+            	break;
+            }
         }
-        
-       if (misMatch == true) {
-           JOptionPane.showMessageDialog(null, "Puzzle is incorrect.",
-                                                             "Check Solution",
-                                                             JOptionPane.WARNING_MESSAGE);
-       }
+       if (solved == true)
+    	   JOptionPane.showMessageDialog(null, "Puzzle completed successfully.", "Check Solution", JOptionPane.INFORMATION_MESSAGE);
        else
-        JOptionPane.showMessageDialog(null,
-                                                          "Puzzle completed successfully.",
-                                                          "Check Solution",
-                                                          JOptionPane.INFORMATION_MESSAGE);
-        
-        
-        
-        
+    	   JOptionPane.showMessageDialog(null, "Puzzle is incorrect.", "Check Solution", JOptionPane.WARNING_MESSAGE);
     }
-
 
     void createNewPuzzle() {
         current_game.generateNewSolution();
