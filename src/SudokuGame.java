@@ -40,7 +40,6 @@ public class SudokuGame extends JFrame {
     private JButton jButtonCheckSolution = new JButton();
     private JButton jButtonShowSolution = new JButton();
     private JPanel jPanel1 = new JPanel();
-    private int levelSelected;
     public static SkillLevelSelection skillLevelSelection;
     public static JFrame aboutFrame;
     private static boolean aboutExists = false;
@@ -231,8 +230,6 @@ public class SudokuGame extends JFrame {
 
         System.out.println("New game clicked");
 
-        createNewPuzzle();
-
     }
 
     void loadGame_ActionPerformed(ActionEvent e) {
@@ -275,7 +272,7 @@ public class SudokuGame extends JFrame {
     }
 
     public void setLevelSelected(int level) {
-        levelSelected = level;
+        current_game.setDifficultyLevelId(level);
     }
 
 
@@ -582,7 +579,7 @@ public class SudokuGame extends JFrame {
     }
 
 
-    private void createNewPuzzle() {
+    void createNewPuzzle() {
         current_game.generateNewSolution();
         ArrayList<Integer> given_values = current_game.getGivenValues();
         int[] solution = current_game.getSolution();
@@ -599,67 +596,8 @@ public class SudokuGame extends JFrame {
                    btnarray[i].setText("");
                }   
         }
-    } 
-        
-    
-    private void loadSkippedValues() { // to be deleted after I get skippedValues
-        
-        skippedValues.add(Integer.valueOf(0));
-        skippedValues.add(Integer.valueOf(1));
-        skippedValues.add(Integer.valueOf(2));
-        skippedValues.add(Integer.valueOf(4));
-        skippedValues.add(Integer.valueOf(5));
-        skippedValues.add(Integer.valueOf(10));
-        skippedValues.add(Integer.valueOf(11));
-        skippedValues.add(Integer.valueOf(12));
-        skippedValues.add(Integer.valueOf(16));
-        skippedValues.add(Integer.valueOf(19));
-        skippedValues.add(Integer.valueOf(21));
-        skippedValues.add(Integer.valueOf(23));
-        skippedValues.add(Integer.valueOf(24));
-        skippedValues.add(Integer.valueOf(26));
-        skippedValues.add(Integer.valueOf(27));
-        skippedValues.add(Integer.valueOf(28));
-        skippedValues.add(Integer.valueOf(29));
-        skippedValues.add(Integer.valueOf(30));
-        skippedValues.add(Integer.valueOf(33));
-        skippedValues.add(Integer.valueOf(35));
-        skippedValues.add(Integer.valueOf(36));
-        skippedValues.add(Integer.valueOf(39));
-        skippedValues.add(Integer.valueOf(40));
-        skippedValues.add(Integer.valueOf(41));
-        skippedValues.add(Integer.valueOf(44));
-        skippedValues.add(Integer.valueOf(45));
-        skippedValues.add(Integer.valueOf(47));
-        skippedValues.add(Integer.valueOf(50));
-        skippedValues.add(Integer.valueOf(35));
-        skippedValues.add(Integer.valueOf(36));
-        skippedValues.add(Integer.valueOf(39));
-        skippedValues.add(Integer.valueOf(40));
-        skippedValues.add(Integer.valueOf(41));
-        skippedValues.add(Integer.valueOf(44));
-        skippedValues.add(Integer.valueOf(45));
-        skippedValues.add(Integer.valueOf(47));
-        skippedValues.add(Integer.valueOf(50));
-        skippedValues.add(Integer.valueOf(51));
-        skippedValues.add(Integer.valueOf(52));
-        skippedValues.add(Integer.valueOf(53));
-        skippedValues.add(Integer.valueOf(54));
-        skippedValues.add(Integer.valueOf(56));
-        skippedValues.add(Integer.valueOf(57));
-        skippedValues.add(Integer.valueOf(59));
-        skippedValues.add(Integer.valueOf(61));
-        skippedValues.add(Integer.valueOf(64));
-        skippedValues.add(Integer.valueOf(68));
-        skippedValues.add(Integer.valueOf(69));
-        skippedValues.add(Integer.valueOf(70));
-        skippedValues.add(Integer.valueOf(75));
-        skippedValues.add(Integer.valueOf(76));
-        skippedValues.add(Integer.valueOf(78));
-        skippedValues.add(Integer.valueOf(79));
-        skippedValues.add(Integer.valueOf(80));
-
     }
+    
     // Inner class saved data record:
     private class SavedDataRecord {
         

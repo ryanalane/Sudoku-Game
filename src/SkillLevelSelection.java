@@ -29,7 +29,6 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             jbInit();
             this.parent = parent;
-            //this.parent = parent;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,19 +66,20 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
         if (e.getActionCommand()== "Beginner")
         {
         System.out.println("Beginner clicked");
-        level = 1;
+        level = 0;
         }
         else if (e.getActionCommand()== "Intermediate")
         {
         System.out.println("Intermediate clicked");
-        level = 2;
+        level = 1;
         }
         else
         {
-        level = 3;
+        level = 2;
         System.out.println("Advanced clicked");
         }
         parent.setLevelSelected(level);
+        parent.createNewPuzzle();
         this.dispose();
     }
 
