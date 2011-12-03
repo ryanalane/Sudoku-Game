@@ -183,7 +183,7 @@ public class SudokuGame extends JFrame {
         jPanel1.setLayout(new GridLayout(9, 9));
 
         jPanel1.setBackground(Color.white);
-        //this.setIconImage(new ImageIcon(imgURL).getImage());
+        this.setIconImage(new ImageIcon(imgURL).getImage());
 
         for (int i = 0; i < 81; i++) {
             btnarray[i] = new JButton();

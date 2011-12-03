@@ -56,8 +56,8 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
         this.getContentPane().add(jButton2, null);
         this.getContentPane().add(jLabel1, null);
         this.getContentPane().add(jButton1, null);
-        //URL imgURL = getClass().getResource("icons/skilllevel.gif"); // DOES NOT APPEAR
-        //this.setIconImage(new ImageIcon(imgURL).getImage());
+        URL imgURL = getClass().getResource("icons/skilllevel.gif"); // DOES NOT APPEAR
+        this.setIconImage(new ImageIcon(imgURL).getImage());
         
     }
 
