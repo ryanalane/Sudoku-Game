@@ -79,7 +79,7 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
         System.out.println("Advanced clicked");
         }
         parent.setLevelSelected(level);
-        parent.createNewPuzzle();
+        parent.skillLevelChosen();
         this.dispose();
     }
 

@@ -28,6 +28,8 @@ public class About extends JPanel {
     
     private Icon labelSudokuGridpic = new ImageIcon(getClass().getResource("media/sudokugrid.JPG"));
     private JLabel jLabel4 = new JLabel();
+    private JLabel jLabel5 = new JLabel();
+    private JLabel jLabel6 = new JLabel();
 
     public About() {
         try {
@@ -41,32 +43,40 @@ public class About extends JPanel {
 
     private void jbInit() throws Exception {
         this.setLayout( null );
-        this.setSize(new Dimension(711, 391));
+        this.setSize(new Dimension(325, 274));
         this.setBackground(new Color(255, 173, 82));
         jLabel1.setText("Sudoku Game");
-        jLabel1.setBounds(new Rectangle(25, 20, 140, 35));
+        jLabel1.setBounds(new Rectangle(20, 5, 140, 20));
         jLabel1.setBackground(new Color(255, 123, 82));
-        jLabel1.setFont(new Font("Tahoma", 0, 16));
+        jLabel1.setFont(new Font("Tahoma", 0, 14));
         jLabel2.setText("Developed by Sylvia Barnai and Ryan Lane");
-        jLabel2.setBounds(new Rectangle(25, 65, 290, 35));
-        jLabel2.setFont(new Font("Tahoma", 0, 14));
+        jLabel2.setBounds(new Rectangle(20, 30, 290, 25));
+        jLabel2.setFont(new Font("Tahoma", 0, 12));
         jLabel3.setText("Copyright 2011");
-        jLabel3.setBounds(new Rectangle(25, 110, 115, 20));
+        jLabel3.setBounds(new Rectangle(20, 60, 115, 20));
         jButtonOK.setText("OK");
-        jButtonOK.setBounds(new Rectangle(25, 220, 75, 21));
+        jButtonOK.setBounds(new Rectangle(25, 235, 75, 21));
         jButtonOK.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     jButtonOK_actionPerformed(e);
                 }
             });
-        jLabel4.setBounds(new Rectangle(135, 115, 195, 90));
-        jLabel4.setIcon(labelSudokuGridpic); 
+        jLabel4.setBounds(new Rectangle(135, 150, 180, 90));
+        jLabel4.setIcon(labelSudokuGridpic);
+        jLabel5.setText("This program is compatible with Windows, Mac and");
+        jLabel5.setBounds(new Rectangle(15, 90, 295, 15));
+        jLabel5.setFont(new Font("Dialog", 1, 10));
+        jLabel6.setText("Linux.");
+        jLabel6.setBounds(new Rectangle(25, 105, 220, 15));
+        jLabel6.setFont(new Font("Dialog", 1, 10));
+        this.add(jLabel6, null);
+        this.add(jLabel5, null);
         this.add(jLabel4, null);
         this.add(jButtonOK, null);
+
         this.add(jLabel3, null);
         this.add(jLabel2, null);
         this.add(jLabel1, null);
-
         SudokuGame.aboutFrame.addWindowListener(new WindowAdapter() {
                 public void windowClosed(WindowEvent e)
                 {
