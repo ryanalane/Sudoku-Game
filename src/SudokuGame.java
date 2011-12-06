@@ -3,14 +3,14 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+
+import javax.swing.JSeparator;
 import javax.swing.text.*;
 import java.util.Scanner;
 import java.io.IOException;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,15 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import java.net.URL;
 import java.util.ArrayList;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.geom.*;
-import javax.swing.border.*;
+import java.util.Iterator;
+import java.util.ListIterator;
 
 public class SudokuGame extends JFrame {
 	private GameData current_game = new GameData(0);
@@ -49,12 +42,9 @@ public class SudokuGame extends JFrame {
     private JButton jButtonCheckSolution = new JButton();
     private JButton jButtonShowSolution = new JButton();
     private JPanel jPanel1 = new JPanel();
-    
- 
     public static SkillLevelSelection skillLevelSelection;
     public static JFrame aboutFrame;
     private static boolean aboutExists = false;
-    
     //Icon for main class
     URL imgURL = getClass().getResource("icons/sudoku.gif");
 
@@ -80,9 +70,10 @@ public class SudokuGame extends JFrame {
     //Creating various arrays to be used throughout the main class
     
     int[][] currentArrayOfNumbers = new int[NUM_IN_A_ROW][NUM_IN_A_COLUMN];
+    
      // int[][] solutionIntArray = new int[rowNumberAccessed][colNumberAccessed]; -- when randomPuzzle solutions are added
     
-//    int[][] solutionIntArray = { { 3, 9, 8, 4, 1, 5, 2, 7, 6 }, { 1, 2, 4, 3, 6, 7, 5, 8, 9 },
+    //    int[][] solutionIntArray = { { 3, 9, 8, 4, 1, 5, 2, 7, 6 }, { 1, 2, 4, 3, 6, 7, 5, 8, 9 },
    //   { 5, 6, 7, 2, 8, 9, 1, 3, 4 }, { 7, 1, 2, 5, 3, 4, 6, 9, 8 },
    //   { 6, 3, 5, 1, 9, 8, 4, 2, 7 }, { 8, 4, 9, 6, 7, 2, 3, 1, 5 },
    //   { 4, 7, 1, 8, 2, 6, 9, 5, 3 }, { 2, 8, 6, 9, 5, 3, 7, 4, 1 },
@@ -99,12 +90,10 @@ public class SudokuGame extends JFrame {
     // ArrayList for holding a list of data records:
     private ArrayList<SavedDataRecord> savedDataObjectsList = new ArrayList<SavedDataRecord>();
     private boolean lastButtonPushedWasSave = false;
-    
+
     public SudokuGame() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            //Object lookingatSolution=LookAndFeel.makeIcon(getClass(),"lookingatsolution.gif");
-            //UIManager.put("OptionPane.errorIcon",lookingatSolution);
             jbInit();
         }
         catch (Exception e) {
@@ -196,8 +185,6 @@ public class SudokuGame extends JFrame {
         this.getContentPane().add(jButtonShowSolution, null);
         this.getContentPane().add(jButtonCheckSolution, null);
         jPanel1.setLayout(new GridLayout(9, 9));
-       
-      
 
         jPanel1.setBackground(Color.white);
         this.setIconImage(new ImageIcon(imgURL).getImage());
@@ -209,10 +196,10 @@ public class SudokuGame extends JFrame {
             jPanel1.add(btnarray[i]);
             Font font = new Font("Arial", Font.BOLD, 16);
             btnarray[i].setFont(font);
+        
+            
             
         }
-        
-        
 
         
     }
@@ -246,16 +233,6 @@ public class SudokuGame extends JFrame {
         skillLevelSelection.setLocationRelativeTo(null);
         skillLevelSelection.setVisible(true); 
         
-        for (int i = 0; i < currentArrayOfNumbers.length; i++) {
-            for (int j = 0; j < currentArrayOfNumbers[i].length; j++) {
-        for (int n = 0; n < 81; n++) {
-                btnarray[n].setForeground(Color.BLACK);
-                currentArrayOfNumbers[i][j]=0;
-        }
-            }
-        }
-        
-        //createNewPuzzle();
 
         System.out.println("New game clicked");
 
@@ -331,45 +308,68 @@ public class SudokuGame extends JFrame {
             {
                 if (e.getActionCommand().equals("Undo")) {
                     try{
+                        
+                        int lastSavedNumber =  savedDataObjectsList.get(savedDataObjectsList.size()-1).getIntegerData();
+                        int lastSavedX = savedDataObjectsList.get(savedDataObjectsList.size()-1).getXCoordinateOfButton();    
+                        int lastSavedY = savedDataObjectsList.get(savedDataObjectsList.size()-1).getYCoordinateOfButton();
+                        int lastSavedButtonNumber = savedDataObjectsList.get(savedDataObjectsList.size()-1).getButtonNumber();
                     
-                        if (lastButtonPushedWasSave){ 
-                            savedDataObjectsList.remove(savedDataObjectsList.size()-1);   // remove the last record from list first, last saved record is always the same as current record
-                        }
+                    System.out.println("lastSavedNumber = " + lastSavedNumber);
+                    System.out.println("lastSavedX = " + lastSavedX);
+                    System.out.println("lastSavedY = " + lastSavedY);
+                    System.out.println("lastSavedButtonNumber = " + lastSavedButtonNumber);
                     
-                    int lastSavedNumber =  savedDataObjectsList.get(savedDataObjectsList.size()-1).getIntegerData();
-                    int lastSavedX = savedDataObjectsList.get(savedDataObjectsList.size()-1).getXCoordinateOfButton();    
-                    int lastSavedY = savedDataObjectsList.get(savedDataObjectsList.size()-1).getXCoordinateOfButton();
-                    int lastSavedButtonNumber = savedDataObjectsList.get(savedDataObjectsList.size()-1).getButtonNumber();
-                    savedDataObjectsList.remove(savedDataObjectsList.size()-1);   // remove the last record from list    
-                    
-                    // update the GUI with the retrieved data:
-                    btnarray[buttonNumberPushed].setText(String.valueOf(lastSavedNumber));
-                    
-                        lastButtonPushedWasSave = false;
+                    System.out.println("Last saved Data Acquired");    
+                        
+                    //update the GUI with the retrieved data, unless zero, if zero update GUI with "":
+                        if(lastSavedNumber != 0)
+                        btnarray[buttonNumberPushed].setText(String.valueOf(lastSavedNumber));
+                        else
+                        btnarray[buttonNumberPushed].setText("");
+                        
+                    // Update the current array with retrieved number:
+                    currentArrayOfNumbers[lastSavedX][lastSavedY] =  lastSavedNumber;   
+                        
+                        
+                     //   savedDataObjectsList.remove(savedDataObjectsList.size()-1);   // remove the last record from list
+                            // restore later !!!
+                        
+                    // Undo operation problem here!!!!
+                        
+                        // for now, remove ALL elements from arraylist, not just last one.
+                        // For the demo it will be SINGLE ELEMENT UNDO:
+
+                        savedDataObjectsList.clear();  // Remove all elements from arraylist after first one
+                        // Temporary, for teacher demo.
+
                     }
                     catch (Exception exe){
                         
                         System.out.println("The arraylist has no more elements");
-                        JOptionPane.showMessageDialog(null, "You have reached your first entry." , "Unable to Load Data" , JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "You can only undo one piece of data, for now." , "Unable to Load Data" , JOptionPane.WARNING_MESSAGE);
+                        // JOptionPane.showMessageDialog(null, "You have reached your first entry." , "Unable to Load Data" , JOptionPane.WARNING_MESSAGE);
                     }
                     
                     
                     
                     System.out.println("Undo button clicked");
+                    
                 } else if (e.getActionCommand().equals("Reset"))
                 {
                     for (int i = 0; i < currentArrayOfNumbers.length; i++) {
                         for (int j = 0; j < currentArrayOfNumbers[i].length; j++) {
                     for (int n = 0; n < 81; n++) {
-                            btnarray[n].setForeground(Color.BLACK);
                             btnarray[n].setText("");
+                            btnarray[n].setForeground(new Color(0x00, 0x00, 0x00));  // RESET COLOR
                             currentArrayOfNumbers[i][j]=0;
+                            
                     }
                         }
                     }
                 System.out.println("Reset button clicked");
                 }
                     
+                
                     else if (e.getActionCommand().equals("Check Solution")) {
                     
                     if (solutionShowed == true) {
@@ -380,21 +380,6 @@ public class SudokuGame extends JFrame {
                                return;
                                
                            }
-                    for (int i = 0; i < currentArrayOfNumbers.length; i++) {
-                        for (int j = 0; j < currentArrayOfNumbers[i].length; j++) {
-                            for (int n = 0; n < 81; n++) {
-                                    btnarray[n].setText("");
-                    if (currentArrayOfNumbers[i][j]==0) {
-                        JOptionPane.showMessageDialog(null,
-                                                      "There is currently nothing in the puzzle.",
-                                                      "Puzzle Information",
-                                                      JOptionPane.INFORMATION_MESSAGE); 
-                        return;
-                    }
-                        }
-                        }
-                    }
-                                                       
                     checkSolution();
                     System.out.println("Check solution clicked");
                     
@@ -550,15 +535,24 @@ public class SudokuGame extends JFrame {
                 String n = numberUserEntered;
                 n = Character.toString(c);
                 System.out.println(n);
+                
                 btnarray[buttonNumberPushed].setForeground(new Color(0xB2, 0x22, 0x22));
                 btnarray[buttonNumberPushed].setText(String.valueOf(n));
-                int numberEntered = Integer.parseInt(n);     
+                int numberEntered = Integer.parseInt(n);  
+                
+                System.out.println("Prev # to save:" + currentArrayOfNumbers[rowNumberAccessed][colNumberAccessed]);
+                SavedDataRecord savedDataRecord = new SavedDataRecord(currentArrayOfNumbers[rowNumberAccessed][colNumberAccessed], rowNumberAccessed, colNumberAccessed, buttonNumberPushed);
+            
+                
                 currentArrayOfNumbers[rowNumberAccessed][colNumberAccessed] = numberEntered;
                 btnarray[buttonNumberPushed].setBackground(new Color(0xD3, 0xD3, 0xD3));
             try{
                     // Create a new instance of data record:
                 
-                    SavedDataRecord savedDataRecord = new SavedDataRecord(numberEntered, rowNumberAccessed, colNumberAccessed, buttonNumberPushed);
+               // System.out.println("Prev # to save:" + currentArrayOfNumbers[rowNumberAccessed][colNumberAccessed]);
+               // SavedDataRecord savedDataRecord = new SavedDataRecord(numberEntered, rowNumberAccessed, colNumberAccessed, buttonNumberPushed);
+                    
+                    
                     
                     savedDataObjectsList.add(savedDataRecord);
                 
@@ -632,6 +626,8 @@ public class SudokuGame extends JFrame {
         for (int i = 0; i < 81; i++) {
                 int row_id = SquareData.getRowId(i);
                 int col_id = SquareData.getColId(i);
+            
+                btnarray[i].setForeground(new Color(0x00, 0x00, 0x00));  // RESET COLOR
                 
                if (given_values.contains(i)) {
             	   btnarray[i].setText(String.valueOf(solution[i]));
@@ -700,9 +696,7 @@ public class SudokuGame extends JFrame {
     public void skillLevelChosen() {
         createNewPuzzle();
     }
-    
-   
 }
     
-
+//CREATE AN INTEGER ARRAY THAT IS A COPY OF THE BUTTON ARRAY TO STORE THE INPUTTED VALUES/FUNCTIONALITY STUFF
 
