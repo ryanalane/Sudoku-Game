@@ -3,14 +3,11 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-
-import javax.swing.JSeparator;
-import javax.swing.text.*;
-import java.util.Scanner;
 import java.io.IOException;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,8 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
+import java.awt.geom.*;
 
 public class SudokuGame extends JFrame {
 	private GameData current_game = new GameData(0);
@@ -41,25 +37,29 @@ public class SudokuGame extends JFrame {
     private JButton jButtonReset = new JButton();
     private JButton jButtonCheckSolution = new JButton();
     private JButton jButtonShowSolution = new JButton();
-    private JPanel jPanel1 = new JPanel();
+    
+    // Customized jPanel instance with drawn lines
+    private MyJPanel jPanel1 = new MyJPanel(); 
+    
     public static SkillLevelSelection skillLevelSelection;
     public static JFrame aboutFrame;
     private static boolean aboutExists = false;
     //Icon for main class
     URL imgURL = getClass().getResource("icons/sudoku.gif");
 
+    //Constants
+    private final int NUM_IN_A_ROW = 9;
+    private final int NUM_IN_A_COLUMN = 9;
+    private final int NUM_OF_BUTTOMS_IN_ARRAY = 81;
+
     // Add array of buttons to class
-    private JButton[] btnarray = new JButton[81];
+    private JButton[] btnarray = new JButton[NUM_OF_BUTTOMS_IN_ARRAY];
     
     //ButtonListener and KeyListener instances:
     private ArrayButtonListener arrayButtonListener = new ArrayButtonListener();
     private MyKeyListener myKeyListener = new MyKeyListener();
     private ButtonListener buttonListener = new ButtonListener();
     
-    //Constants
-    private final int NUM_IN_A_ROW = 9;
-    private final int NUM_IN_A_COLUMN = 9;
-    private final int NUM_OF_BUTTONS = 81;
     
     //ints and Strings used for accessing information about buttons in array
     private int rowNumberAccessed;
@@ -89,7 +89,9 @@ public class SudokuGame extends JFrame {
     
     // ArrayList for holding a list of data records:
     private ArrayList<SavedDataRecord> savedDataObjectsList = new ArrayList<SavedDataRecord>();
-    private boolean lastButtonPushedWasSave = false;
+    
+    GridLayout myButtonLayout = new GridLayout(NUM_IN_A_ROW,NUM_IN_A_COLUMN);
+    
 
     public SudokuGame() {
         try {
@@ -147,7 +149,6 @@ public class SudokuGame extends JFrame {
 
 
         //Modify for other menus -- menuHelpAbout.addActionListener( new ActionListener() { public void actionPerformed( ActionEvent ae ) { helpAbout_ActionPerformed( ae ); } } );
-
         jButtonUndo.setText("Undo");
         jButtonUndo.setBounds(new Rectangle(175, 330, 75, 21));
         jButtonUndo.addActionListener(buttonListener);
@@ -163,7 +164,6 @@ public class SudokuGame extends JFrame {
         jButtonShowSolution.setText("Show Solution");
         jButtonShowSolution.setBounds(new Rectangle(315, 360, 170, 20));
         jButtonShowSolution.addActionListener(buttonListener);
-
         jButtonShowSolution.setBackground(new Color(0, 214, 214));
         jPanel1.setBounds(new Rectangle(85, 15, 425, 300));
         menuFile.add(menuNewGame);
@@ -184,25 +184,34 @@ public class SudokuGame extends JFrame {
         this.getContentPane().add(jPanel1, null);
         this.getContentPane().add(jButtonShowSolution, null);
         this.getContentPane().add(jButtonCheckSolution, null);
-        jPanel1.setLayout(new GridLayout(9, 9));
+        
+        
+        // Setting borders, gap and layout for jpanel:
+        jPanel1.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
+         //Set up the horizontal gap value for buttons:
+        myButtonLayout.setHgap(3);
+         //Set up the vertical gap value for buttons:
+        myButtonLayout.setVgap(3);
+        // Set the layout as myButtonLayout: 
+        jPanel1.setLayout(myButtonLayout);  ///  KEEP IT TOGETHER AND SET THE LAYOUT TO THE GRIDLAYOUT YOU JUST MADE
+        
 
         jPanel1.setBackground(Color.white);
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
-        for (int i = 0; i < 81; i++) {
+
+        for (int i = 0; i < NUM_OF_BUTTOMS_IN_ARRAY; i++) {
             btnarray[i] = new JButton();
             btnarray[i].addActionListener(arrayButtonListener);
             btnarray[i].addKeyListener(myKeyListener);
             jPanel1.add(btnarray[i]);
             Font font = new Font("Arial", Font.BOLD, 16);
             btnarray[i].setFont(font);
-        
-            
-            
         }
-
-        
+  
     }
+    
+    
 
     public static void unsetAboutExists() {
         aboutExists = false;
@@ -224,8 +233,9 @@ public class SudokuGame extends JFrame {
         sudokuGame.setResizable(false);
         sudokuGame.setVisible(true);
     }
+    
+    
     void newGame_ActionPerformed(ActionEvent e) {
-        
         
         skillLevelSelection = new SkillLevelSelection(this);
         skillLevelSelection.setResizable(false);
@@ -233,7 +243,6 @@ public class SudokuGame extends JFrame {
         skillLevelSelection.setLocationRelativeTo(null);
         skillLevelSelection.setVisible(true); 
         
-
         System.out.println("New game clicked");
 
     }
@@ -293,7 +302,6 @@ public class SudokuGame extends JFrame {
                           ex.printStackTrace();
                       }
 
-
         System.out.println("Help Contents clicked");
     }
 
@@ -301,7 +309,58 @@ public class SudokuGame extends JFrame {
         current_game.setDifficultyLevelId(level);
     }
 
+    private void showSolution() {
+        int[] solution = current_game.getSolution();
+        for (int i = 0; i < 81; i++) {
+                btnarray[i].setText(String.valueOf(solution[i]));
+        }
+    }
 
+    private void checkSolution() {
+        boolean solved = true;
+        int[] solution = current_game.getSolution();
+        for (int i = 0; i < 81; i++) {
+                int row_id = SquareData.getRowId(i);
+                int col_id = SquareData.getColId(i);
+            if (currentArrayOfNumbers[row_id][col_id] != solution[i]) {
+                solved = false;
+                break;
+            }
+        }
+       if (solved == true)
+           JOptionPane.showMessageDialog(null, "Puzzle completed successfully.", "Check Solution", JOptionPane.INFORMATION_MESSAGE);
+       else
+           JOptionPane.showMessageDialog(null, "Puzzle is incorrect.", "Check Solution", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void createNewPuzzle() {
+        current_game.generateNewSolution();
+        ArrayList<Integer> given_values = current_game.getGivenValues();
+        int[] solution = current_game.getSolution();
+
+        for (int i = 0; i < 81; i++) {
+                int row_id = SquareData.getRowId(i);
+                int col_id = SquareData.getColId(i);
+            
+                btnarray[i].setForeground(new Color(0x00, 0x00, 0x00));  // RESET COLOR
+                
+               if (given_values.contains(i)) {
+                   btnarray[i].setText(String.valueOf(solution[i]));
+                   currentArrayOfNumbers[row_id][col_id] = solution[i];
+               } else {
+                   currentArrayOfNumbers[row_id][col_id] = 0;
+                   btnarray[i].setText("");
+               }   
+        }
+    }
+    
+    public void skillLevelChosen() {
+        createNewPuzzle();
+    }
+
+
+
+    // Actionlistener for other non-array buttons:
     private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
@@ -330,28 +389,17 @@ public class SudokuGame extends JFrame {
                     // Update the current array with retrieved number:
                     currentArrayOfNumbers[lastSavedX][lastSavedY] =  lastSavedNumber;   
                         
-                        
-                     //   savedDataObjectsList.remove(savedDataObjectsList.size()-1);   // remove the last record from list
-                            // restore later !!!
-                        
-                    // Undo operation problem here!!!!
-                        
-                        // for now, remove ALL elements from arraylist, not just last one.
-                        // For the demo it will be SINGLE ELEMENT UNDO:
-
-                        savedDataObjectsList.clear();  // Remove all elements from arraylist after first one
-                        // Temporary, for teacher demo.
+                        savedDataObjectsList.clear();  // Remove all elements from arraylist after first one, one-level undo
 
                     }
                     catch (Exception exe){
                         
                         System.out.println("The arraylist has no more elements");
-                        JOptionPane.showMessageDialog(null, "You can only undo one piece of data, for now." , "Unable to Load Data" , JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "You can only undo one piece of data." , "Unable to Load Data" , JOptionPane.WARNING_MESSAGE);
                         // JOptionPane.showMessageDialog(null, "You have reached your first entry." , "Unable to Load Data" , JOptionPane.WARNING_MESSAGE);
                     }
                     
-                    
-                    
+
                     System.out.println("Undo button clicked");
                     
                 } else if (e.getActionCommand().equals("Reset"))
@@ -361,8 +409,7 @@ public class SudokuGame extends JFrame {
                     for (int n = 0; n < 81; n++) {
                             btnarray[n].setText("");
                             btnarray[n].setForeground(new Color(0x00, 0x00, 0x00));  // RESET COLOR
-                            currentArrayOfNumbers[i][j]=0;
-                            
+                            currentArrayOfNumbers[i][j]=0;      
                     }
                         }
                     }
@@ -378,7 +425,6 @@ public class SudokuGame extends JFrame {
                                                              "Solution Information",
                                                              JOptionPane.INFORMATION_MESSAGE); 
                                return;
-                               
                            }
                     checkSolution();
                     System.out.println("Check solution clicked");
@@ -389,8 +435,6 @@ public class SudokuGame extends JFrame {
                     showSolution();
                     System.out.println("Show solution clicked");
                     jButtonShowSolution.setText("Hide Solution");
-                    
-                    
                     
                 }
                 else if (e.getActionCommand().equals("Hide Solution")) {
@@ -417,8 +461,9 @@ public class SudokuGame extends JFrame {
         }
     }
 
-    // I put this in manually:   INNER CLASS ACTIONLISTENER FOR BUTTON ARRAY implementing ActionListener adaptor ******************************
 
+
+    // INNER CLASS ACTIONLISTENER FOR BUTTON ARRAY implementing ActionListener
     private class ArrayButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             
@@ -433,19 +478,19 @@ public class SudokuGame extends JFrame {
 
             //copy paste all 81 coordinates in the JPanel for each button in the array
             String[] buttonCoordinatesInPanelArray =
-            { "0,0", "47,0", "94,0", "141,0", "188,0", "235,0", "282,0",
-              "329,0", "376,0", "0,33", "47,33", "94,33", "141,33", "188,33",
-              "235,33", "282,33", "329,33", "376,33", "0,66", "47,66", "94,66",
-              "141,66", "188,66", "235,66", "282,66", "329,66", "376,66",
-              "0,99", "47,99", "94,99", "141,99", "188,99", "235,99", "282,99",
-              "329,99", "376,99", "0,132", "47,132", "94,132", "141,132",
-              "188,132", "235,132", "282,132", "329,132", "376,132", "0,165",
-              "47,165", "94,165", "141,165", "188,165", "235,165", "282,165",
-              "329,165", "376,165", "0,198", "47,198", "94,198", "141,198",
-              "188,198", "235,198", "282,198", "329,198", "376,198", "0,231",
-              "47,231", "94,231", "141,231", "188,231", "235,231", "282,231",
-              "329,231", "376,231", "0,264", "47,264", "94,264", "141,264",
-              "188,264", "235,264", "282,264", "329,264", "376,264" };
+            { "3,3", "49,3", "95,3", "141,3", "187,3", "233,3", "279,3",
+              "325,3", "371,3", "3,36", "49,36", "95,36", "141,36", "187,36",
+              "233,36", "279,36", "325,36", "371,36", "3,69", "49,69", "95,69",
+              "141,69", "187,69", "233,69", "279,69", "325,69", "371,69",
+              "3,102", "49,102", "95,102", "141,102", "187,102", "233,102", "279,102",
+              "325,102", "371,102", "3,135", "49,135", "95,135", "141,135",
+              "187,135", "233,135", "279,135", "325,135", "371,135", "3,168",
+              "49,168", "95,168", "141,168", "187,168", "233,168", "279,168",
+              "325,168", "371,168", "3,201", "49,201", "95,201", "141,201",
+              "187,201", "233,201", "279,201", "325,201", "371,201", "3,234",
+              "49,234", "95,234", "141,234", "187,234", "233,234", "279,234",
+              "325,234", "371,234", "3,267", "49,267", "95,267", "141,267",
+              "187,267", "233,267", "279,267", "325,267", "371,267" };
 
             buttonNumberPushed = 0;
 
@@ -483,16 +528,15 @@ public class SudokuGame extends JFrame {
             }
 
             // Row and column indexes for int[][] array containing numbers for the game:
-            System.out.println("row index: " + rowNumberAccessed +
-                               "   column index: " + colNumberAccessed + "\n");
+           // System.out.println("row index: " + rowNumberAccessed +
+           //                    "   column index: " + colNumberAccessed + "\n");
 
-            // make it so that the button changes color when you press it, so that the user knows which position is edited. (inside here)
+            // the button changes color when you press it, so that the user knows which position is edited. (inside here)
             // then when they hit a number on keyboard make the colot go back to original (inside key listener class)
 
         }
 
         // Helper method inside inner class for finding the 3rd comma in string:
-
         private int getIndexOfThirdComma(String passedDownString) {
             int retValue = 0;
             int commaCounter = 0;
@@ -512,10 +556,8 @@ public class SudokuGame extends JFrame {
 
     }
 
-    // Implement KeyListener interface here in an inner class called say MyKeyListener (one method inside will retrieve the keypress, which needs to change the appropruate
-    // button text in GUI, note that all abstract methods have to be implemented in KeyListener)
-    // keyreleased -- most important abstract method
-
+    // Implemented KeyListener interface here in an inner class called say MyKeyListener (one method inside will retrieve the keypress, which needs to change the appropruate
+    // button text in GUI and saved in an array, all abstract methods have to be implemented in KeyListener)
     private class MyKeyListener implements KeyListener
 
     {
@@ -556,7 +598,6 @@ public class SudokuGame extends JFrame {
                     
                     savedDataObjectsList.add(savedDataRecord);
                 
-                    lastButtonPushedWasSave = true;
                 }
                     catch (Exception ex){
                         System.out.println("Incorrect Data, Unable to Save");
@@ -566,78 +607,15 @@ public class SudokuGame extends JFrame {
         }
 
         public void keyPressed(KeyEvent e) {
-
-
         }
 
 
         public void keyReleased(KeyEvent e) {
-            
-            
-            
-            //0 - if there is nothing in the square (0 is never shown)
-            //solutionIntArray
         }
     }
 
 
-    private class TextFileFilter extends javax.swing.filechooser.FileFilter {
-        public boolean accept(File f) {
-            return f.isDirectory() ||
-                f.getName().toLowerCase().endsWith(".txt");
-
-        }
-
-        public String getDescription() {
-            return "Text Files(*.txt)";
-
-        }
-    }
-
-    private void showSolution() {
-        int[] solution = current_game.getSolution();
-        for (int i = 0; i < 81; i++) {
-        	btnarray[i].setText(String.valueOf(solution[i]));
-        }
-    }
-
-    private void checkSolution() {
-    	boolean solved = true;
-    	int[] solution = current_game.getSolution();
-        for (int i = 0; i < 81; i++) {
-        	int row_id = SquareData.getRowId(i);
-        	int col_id = SquareData.getColId(i);
-            if (currentArrayOfNumbers[row_id][col_id] != solution[i]) {
-            	solved = false;
-            	break;
-            }
-        }
-       if (solved == true)
-    	   JOptionPane.showMessageDialog(null, "Puzzle completed successfully.", "Check Solution", JOptionPane.INFORMATION_MESSAGE);
-       else
-    	   JOptionPane.showMessageDialog(null, "Puzzle is incorrect.", "Check Solution", JOptionPane.WARNING_MESSAGE);
-    }
-
-   private void createNewPuzzle() {
-        current_game.generateNewSolution();
-        ArrayList<Integer> given_values = current_game.getGivenValues();
-        int[] solution = current_game.getSolution();
-
-        for (int i = 0; i < 81; i++) {
-                int row_id = SquareData.getRowId(i);
-                int col_id = SquareData.getColId(i);
-            
-                btnarray[i].setForeground(new Color(0x00, 0x00, 0x00));  // RESET COLOR
-                
-               if (given_values.contains(i)) {
-            	   btnarray[i].setText(String.valueOf(solution[i]));
-                   currentArrayOfNumbers[row_id][col_id] = solution[i];
-               } else {
-            	   currentArrayOfNumbers[row_id][col_id] = 0;
-                   btnarray[i].setText("");
-               }   
-        }
-    }
+   
     
     // Inner class saved data record:
     private class SavedDataRecord {
@@ -693,10 +671,54 @@ public class SudokuGame extends JFrame {
         
     }
     
-    public void skillLevelChosen() {
-        createNewPuzzle();
+    // Customized JPanel implementation with lines, overriding paintComponent() method:
+    private class MyJPanel extends JPanel{
+        
+        protected void paintComponent(Graphics g) {
+            
+            // Get the dimensions of JPanel: (can be used to calculate the coordinate points of lines
+            // programatically
+            
+            int jpanelWidth = this.getWidth(); //used to measure dimensions of jPanel
+            int jpanelHeight = this.getHeight(); //used to measure dimensions of jPanel
+            
+            //   System.out.println("jpanelWidth = " + jpanelWidth);
+            //   System.out.println("jpanelHeight = " + jpanelHeight);
+    
+            // Graphics2D will give you a better graphics drawing capability than standard AWT graphics
+                
+            Graphics2D g2 = (Graphics2D)g;
+            
+              g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+              g2.setStroke(new BasicStroke(7)); // line width is set here to 4
+            
+              g2.setColor(new Color(0x00,0x00,0x00));   // Change color here for lines.
+            
+              g2.draw(new Line2D.Double(0.0, jpanelHeight/3, jpanelWidth-9, jpanelHeight/3)); //*
+            
+              g2.draw(new Line2D.Double(0.0, 0.66*jpanelHeight, jpanelWidth-9, 0.66*jpanelHeight)); ///// pretty good
+                    
+              g2.draw(new Line2D.Double(jpanelWidth/3-3.0, 0.0, jpanelWidth/3-3.0, jpanelHeight)); //maybe
+            
+              g2.draw(new Line2D.Double(0.66*jpanelWidth-3.0, 0.0, 0.66*jpanelWidth-3.0, jpanelHeight));
+              
+              //lines forming rectangle
+              
+            g2.draw(new Line2D.Double(0.0, 0.0, jpanelWidth-9.0, 0.0)); 
+            g2.draw(new Line2D.Double(2.0, 0.0, 2.0, jpanelHeight-3.0));
+          //  g2.draw(new Line2D.Double(jpanelWidth-9.0, 0.0, jpanelWidth-9.0, jpanelHeight));
+            g2.draw(new Line2D.Double(3.0,jpanelHeight-3.0, jpanelWidth-9.0,jpanelHeight));
+         //     g2.draw(new Rectangle2D.Double(2.0, 2.0, jpanelWidth-2, jpanelHeight-2));
+            
+            // Changed line
+         g2.setStroke(new BasicStroke(6)); // line width is set here to 4
+         g2.draw(new Line2D.Double(jpanelWidth-9.0, 0.0, jpanelWidth-9.0, jpanelHeight));  
+        }
+        
     }
+    
+    
 }
     
-//CREATE AN INTEGER ARRAY THAT IS A COPY OF THE BUTTON ARRAY TO STORE THE INPUTTED VALUES/FUNCTIONALITY STUFF
 
