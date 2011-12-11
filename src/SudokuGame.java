@@ -252,7 +252,13 @@ public class SudokuGame extends JFrame {
     }
 
     void saveGame_ActionPerformed(ActionEvent e) {
-        System.out.println("Save game clicked");
+    	try {
+			current_game.saveGame(currentArrayOfNumbers);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	System.out.println("Save game clicked");
     }
 
     void fileExit_ActionPerformed(ActionEvent e) {     

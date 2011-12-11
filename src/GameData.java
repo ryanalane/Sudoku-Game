@@ -1,5 +1,11 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
+
 
 public class GameData {
 	private boolean has_duplicates = false;
@@ -57,6 +63,7 @@ public class GameData {
 			
 	private int difficulty_level_id = 0;
 	private int generated_solution_id = 0;
+	private int save_game_id = 0;
 	private SquareData[] squares = new SquareData[81];
 	
 	// GameData Methods
@@ -101,6 +108,50 @@ public class GameData {
 	public String getDifficultyLevel() {
 		return difficulty_levels[getDifficultyLevelId()];
 	}
+	
+	public int getSaveGameId () {
+		return save_game_id;
+	}
+	public void setSaveGameId (int new_save_game_id) {
+		save_game_id = new_save_game_id;
+	}
+	
+	public void saveGame(int[][] current_square_array) throws IOException {
+		// Method for saving the game
+		if (getSaveGameId() == 0) {
+			File saved_game_dir = new File("saved_games/");
+			setSaveGameId(saved_game_dir.listFiles().length);
+		}
+		FileWriter new_saved_game = new FileWriter("saved_games/game_"+ Integer.toString(getSaveGameId()) + ".txt");
+		// Write the save_game_id
+		new_saved_game.write(Integer.toString(getSaveGameId()));
+		new_saved_game.write(" ");
+		// Write the difficultly level
+		new_saved_game.write(Integer.toString(getDifficultyLevelId()));
+		new_saved_game.write(" ");
+		// Write the solution id
+		new_saved_game.write(Integer.toString(getGeneratedSolutionId()));
+		new_saved_game.write(" ");
+		// Write the current square data
+		for (int i = 0; i < 81; i++) {
+			int row_id = SquareData.getRowId(i);
+            int col_id = SquareData.getColId(i);
+            new_saved_game.write(Integer.toString(current_square_array[row_id][col_id]));
+            new_saved_game.write(" ");
+		}
+		new_saved_game.close();
+	}
+	
+	public void loadGame() {
+		// Method for loading the game
+		try {
+			Scanner saved_game = new Scanner(new File("saved_games/game_1.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	GameData() {
 		for(int i = 0; i < 81; ++i)
 			squares[i] = new SquareData(i);
