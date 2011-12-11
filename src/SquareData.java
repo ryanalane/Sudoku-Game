@@ -1,11 +1,4 @@
-import java.util.ArrayList;
-
-public class SquareData {
-	private int id = -1;
-	private ArrayList<Integer> duplicate_ids;
-	private int value = 0;
-	private boolean given = false;
-	
+public final class SquareData {
 	static private int[][] sector_values = new int[81][3];
 	static {
 		for (int i = 0; i < sector_values.length; ++i) {
@@ -17,40 +10,6 @@ public class SquareData {
 		}
 	}
 	
-	// SquareData Methods
-	public int getId() {
-		return id;
-	}
-	public void setId(int new_id) {
-		id = new_id;
-	}
-	public int getValue() {
-		return value;
-	}
-	public void setValue(int new_value) {
-		value = new_value;
-	}
-	public void updateValue(int new_user_value) {
-		if(new_user_value >= 1 && new_user_value <= 9)
-			setValue(new_user_value);
-	}
-	public ArrayList<Integer> getDuplicateIds() {
-		return duplicate_ids;
-	}
-	public void resetDuplicateIds() {
-		duplicate_ids.clear();
-	}
-	public void addDuplicateId(int new_dup_id) {
-		duplicate_ids.add(new_dup_id);
-	}
-	public void removeDuplicateId(int id_to_remove) {
-		duplicate_ids.remove(id_to_remove);
-	}
-	public boolean checkForDuplicates() {
-		boolean are_there_duplicates = false;
-		return are_there_duplicates;
-	}
-	
 	static public int getRowId(int cell_id) {
 		return sector_values[cell_id][0];
 	}
@@ -59,13 +18,5 @@ public class SquareData {
 	}
 	static public int getBoxId(int cell_id) {
 		return sector_values[cell_id][2];
-	}
-	
-	SquareData() {
-		duplicate_ids = new ArrayList<Integer>();
-	}
-	SquareData(int new_id) {
-		this();
-		setId(new_id);
 	}
 }

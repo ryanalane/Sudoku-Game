@@ -70,16 +70,8 @@ public class SudokuGame extends JFrame {
     //Creating various arrays to be used throughout the main class
     
     int[][] currentArrayOfNumbers = new int[NUM_IN_A_ROW][NUM_IN_A_COLUMN];
-    
-     // int[][] solutionIntArray = new int[rowNumberAccessed][colNumberAccessed]; -- when randomPuzzle solutions are added
-    
-    //    int[][] solutionIntArray = { { 3, 9, 8, 4, 1, 5, 2, 7, 6 }, { 1, 2, 4, 3, 6, 7, 5, 8, 9 },
-   //   { 5, 6, 7, 2, 8, 9, 1, 3, 4 }, { 7, 1, 2, 5, 3, 4, 6, 9, 8 },
-   //   { 6, 3, 5, 1, 9, 8, 4, 2, 7 }, { 8, 4, 9, 6, 7, 2, 3, 1, 5 },
-   //   { 4, 7, 1, 8, 2, 6, 9, 5, 3 }, { 2, 8, 6, 9, 5, 3, 7, 4, 1 },
-   //   { 9, 5, 3, 7, 4, 1, 8, 6, 2 } }; // - temporary, to be deleted
 	
-    //Arraylist to be used for values that are omitted in puzzles
+    // ArrayList to be used for values that are omitted in puzzles
     ArrayList<Integer> skippedValues = new ArrayList<Integer>();
     
     //Boolean used to control whether the solution is shown or not
@@ -248,7 +240,9 @@ public class SudokuGame extends JFrame {
     }
 
     void loadGame_ActionPerformed(ActionEvent e) {
-        System.out.println("Load game clicked");
+        currentArrayOfNumbers = current_game.loadGame();
+        loadGUI();
+    	System.out.println("Load game clicked");
     }
 
     void saveGame_ActionPerformed(ActionEvent e) {
@@ -364,7 +358,22 @@ public class SudokuGame extends JFrame {
         createNewPuzzle();
     }
 
-
+    public void loadGUI() {
+    	ArrayList<Integer> given_values = current_game.getGivenValues();
+    	for(int i=0; i < 81; ++i) {
+    		int row_id = SquareData.getRowId(i);
+            int col_id = SquareData.getColId(i);
+            
+            if(currentArrayOfNumbers[row_id][col_id] != 0) {
+            	btnarray[i].setText(String.valueOf(currentArrayOfNumbers[row_id][col_id]));
+            	if (!given_values.contains(i)) {
+            		btnarray[i].setForeground(new Color(0xB2, 0x22, 0x22));
+            	}
+            } else {
+            	btnarray[i].setText("");
+            }
+    	}
+    }
 
     // Actionlistener for other non-array buttons:
     private class ButtonListener implements ActionListener {
@@ -459,7 +468,6 @@ public class SudokuGame extends JFrame {
                 btnarray[currentButtonNumber].setText(String.valueOf(currentArrayOfNumbers[i][j]));
             }
         }
-                        
                         System.out.println("Hide solution clicked");
                         jButtonShowSolution.setText("Show Solution");
                     }
@@ -673,8 +681,6 @@ public class SudokuGame extends JFrame {
         public int getButtonNumber() {
             return buttonNumber;
         }
-    
-        
     }
     
     // Customized JPanel implementation with lines, overriding paintComponent() method:
@@ -723,8 +729,6 @@ public class SudokuGame extends JFrame {
         }
         
     }
-    
-    
 }
     
 

@@ -141,20 +141,28 @@ public class GameData {
 		}
 		new_saved_game.close();
 	}
-	/*
-	public void loadGame() {
+
+	public int[][] loadGame() {
 		// Method for loading the game
+		int[][] current_square_array = new int[9][9];
 		try {
 			Scanner saved_game = new Scanner(new File("saved_games/game_1.txt"));
+			setSaveGameId(saved_game.nextInt());
+			setDifficultyLevelId(saved_game.nextInt());
+			setGeneratedSolutionId(saved_game.nextInt());
+			for (int i = 0; i < 81; i++) {
+				int row_id = SquareData.getRowId(i);
+	            int col_id = SquareData.getColId(i);
+	            current_square_array[row_id][col_id] = saved_game.nextInt();
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return current_square_array;
 	}
-	*/
 	GameData() {
-		for(int i = 0; i < 81; ++i)
-			squares[i] = new SquareData(i);
+		generateNewSolution(0);
 	}
 	GameData(int new_difficulty_level_id) {
 		generateNewSolution(new_difficulty_level_id);
