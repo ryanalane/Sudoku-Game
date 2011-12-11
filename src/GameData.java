@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 
 public class GameData {
 	private boolean has_duplicates = false;
@@ -119,6 +121,9 @@ public class GameData {
 	
 	public void saveGame(int[][] current_square_array) throws IOException {
 		// Method for saving the game
+		int answer = JOptionPane.showConfirmDialog(null, "Do you want to save this file?"); 
+		if (answer==0)
+		{
 		if (getSaveGameId() == 0) {
 			File saved_game_dir = new File("saved_games/");
 			FilenameFilter file_filter = new FilenameFilter() {
@@ -152,7 +157,7 @@ public class GameData {
 		}
 		new_saved_game.close();
 	}
-
+	}
 	public int[][] loadGame() {
 		// Method for loading the game
 		int[][] current_square_array = new int[9][9];
