@@ -334,6 +334,7 @@ public class SudokuGame extends JFrame {
     }
 
     private void createNewPuzzle() {
+    	current_game.setSaveGameId(0);
         current_game.generateNewSolution();
         ArrayList<Integer> given_values = current_game.getGivenValues();
         int[] solution = current_game.getSolution();
