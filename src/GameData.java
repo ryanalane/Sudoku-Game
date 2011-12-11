@@ -2,13 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 
 public class GameData {
@@ -122,17 +118,10 @@ public class GameData {
 	
 	public void saveGame(int[][] current_square_array) throws IOException {
 		// Method for saving the game
-		
-		int answer = JOptionPane.showConfirmDialog(null, "Do you want to save this file?"); 
-		if (answer==0)
-{
-				
-		
 		if (getSaveGameId() == 0) {
 			File saved_game_dir = new File("saved_games/");
 			setSaveGameId(saved_game_dir.listFiles().length);
-			}
-			
+		}
 		FileWriter new_saved_game = new FileWriter("saved_games/game_"+ Integer.toString(getSaveGameId()) + ".txt");
 		// Write the save_game_id
 		new_saved_game.write(Integer.toString(getSaveGameId()));
@@ -151,8 +140,8 @@ public class GameData {
             new_saved_game.write(" ");
 		}
 		new_saved_game.close();
-	
 	}
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 	public int[][] loadGame() {
@@ -163,6 +152,8 @@ public class GameData {
 	
 	
 	
+=======
+>>>>>>> 938075b266a072c68cd73fcc74947d41ca833a88
 	/*
 	public void loadGame() {
 >>>>>>> 9b1fb50abbf81a1f720aa68f2ae76a0cd93beda9
@@ -190,19 +181,4 @@ public class GameData {
 	GameData(int new_difficulty_level_id) {
 		generateNewSolution(new_difficulty_level_id);
 	}
-	private class TextFileFilter extends javax.swing.filechooser.FileFilter
-  	{
-  		public boolean accept(File f)
-  		{
-  			return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
-  			
-  		}
-  		public String getDescription()
-  		{
-  			return "Text Files(*.txt)";
-  			
-  		}
-  	}
-
-
 }
