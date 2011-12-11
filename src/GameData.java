@@ -141,22 +141,8 @@ public class GameData {
 		}
 		new_saved_game.close();
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 	public int[][] loadGame() {
-=======
-        
-}
-
-	
-	
-	
-=======
->>>>>>> 938075b266a072c68cd73fcc74947d41ca833a88
-	/*
-	public void loadGame() {
->>>>>>> 9b1fb50abbf81a1f720aa68f2ae76a0cd93beda9
 		// Method for loading the game
 		int[][] current_square_array = new int[9][9];
 		try {
