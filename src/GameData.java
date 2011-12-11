@@ -141,7 +141,7 @@ public class GameData {
 		}
 		new_saved_game.close();
 	}
-	
+	/*
 	public void loadGame() {
 		// Method for loading the game
 		try {
@@ -151,7 +151,7 @@ public class GameData {
 			e.printStackTrace();
 		}
 	}
-	
+	*/
 	GameData() {
 		for(int i = 0; i < 81; ++i)
 			squares[i] = new SquareData(i);
