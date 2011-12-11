@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,7 +121,17 @@ public class GameData {
 		// Method for saving the game
 		if (getSaveGameId() == 0) {
 			File saved_game_dir = new File("saved_games/");
-			setSaveGameId(saved_game_dir.listFiles().length);
+			FilenameFilter file_filter = new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					String lowercaseName = name.toLowerCase();
+					if (lowercaseName.endsWith(".txt")) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+			};
+			setSaveGameId(saved_game_dir.listFiles(file_filter).length+1);
 		}
 		FileWriter new_saved_game = new FileWriter("saved_games/game_"+ Integer.toString(getSaveGameId()) + ".txt");
 		// Write the save_game_id
