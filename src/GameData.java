@@ -161,35 +161,32 @@ public class GameData {
 	}
 	public int[][] loadGame() {
 		// Method for loading the game
-		
-		JFileChooser jfc = new JFileChooser();
-			try
-			{
-				File f = new File(new File(".").getCanonicalPath());
-				jfc.setCurrentDirectory(f);
-				
-				}
-				catch (IOException except)
-				{
-					System.out.println("Unable to set current directory!");
-				}
-				jfc.setFileFilter(new TextFileFilter());
-				int result = jfc.showOpenDialog(null);
 		int[][] current_square_array = new int[9][9];
 		
-		try {
-			Scanner saved_game = new Scanner(new File("saved_games/game_1.txt"));
-			setSaveGameId(saved_game.nextInt());
-			setDifficultyLevelId(saved_game.nextInt());
-			setGeneratedSolutionId(saved_game.nextInt());
-			for (int i = 0; i < 81; i++) {
-				int row_id = SquareData.getRowId(i);
-	            int col_id = SquareData.getColId(i);
-	            current_square_array[row_id][col_id] = saved_game.nextInt();
-			}
+		JFileChooser jfc = new JFileChooser();
+		
+			try
+			{
+				File f = new File(new File(".").getCanonicalPath() + "/saved_games/");
+				jfc.setCurrentDirectory(f);
+				
+				jfc.setFileFilter(new TextFileFilter());
+				jfc.showOpenDialog(null);
+				Scanner saved_game = new Scanner(jfc.getSelectedFile());
+				setSaveGameId(saved_game.nextInt());
+				setDifficultyLevelId(saved_game.nextInt());
+				setGeneratedSolutionId(saved_game.nextInt());
+				for (int i = 0; i < 81; i++) {
+					int row_id = SquareData.getRowId(i);
+					int col_id = SquareData.getColId(i);
+					current_square_array[row_id][col_id] = saved_game.nextInt();
+				}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException except)
+		{
+			System.out.println("Unable to set current directory!");
 		}
 		return current_square_array;
 	}
