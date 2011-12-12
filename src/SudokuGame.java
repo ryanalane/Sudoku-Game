@@ -21,9 +21,10 @@ import java.util.ArrayList;
 import java.awt.geom.*;
 
 public class SudokuGame extends JFrame {
-	private GameData current_game = new GameData(0);
 	
-	//Creating class level variables (properties) for use by all methods in this class
+	
+	
+	// Creating class level variables (properties) for use by all methods in this class
     private JMenuBar menuBar = new JMenuBar();
     private JMenu menuFile = new JMenu();
     private JMenuItem menuNewGame = new JMenuItem();
@@ -44,6 +45,7 @@ public class SudokuGame extends JFrame {
     public static SkillLevelSelection skillLevelSelection;
     public static JFrame aboutFrame;
     private static boolean aboutExists = false;
+    
     //Icon for main class
     URL imgURL = getClass().getResource("icons/sudoku.gif");
 
@@ -55,36 +57,36 @@ public class SudokuGame extends JFrame {
     // Add array of buttons to class
     private JButton[] btnarray = new JButton[NUM_OF_BUTTOMS_IN_ARRAY];
     
-    //ButtonListener and KeyListener instances:
+    // ButtonListener and KeyListener instances:
     private ArrayButtonListener arrayButtonListener = new ArrayButtonListener();
     private MyKeyListener myKeyListener = new MyKeyListener();
     private ButtonListener buttonListener = new ButtonListener();
     
     
-    //ints and Strings used for accessing information about buttons in array
+    // ints and Strings used for accessing information about buttons in array
     private int rowNumberAccessed;
     private int colNumberAccessed;
     private String numberUserEntered;
     private int buttonNumberPushed;
     
-    //Creating various arrays to be used throughout the main class
-    
+    // Creating various arrays to be used throughout the main class
     int[][] currentArrayOfNumbers = new int[NUM_IN_A_ROW][NUM_IN_A_COLUMN];
 	
     // ArrayList to be used for values that are omitted in puzzles
     ArrayList<Integer> skippedValues = new ArrayList<Integer>();
     
-    //Boolean used to control whether the solution is shown or not
+    // Boolean used to control whether the solution is shown or not
     boolean solutionShowed = false;
-    
-    GameData gameData = new GameData();
     
     // ArrayList for holding a list of data records:
     private ArrayList<SavedDataRecord> savedDataObjectsList = new ArrayList<SavedDataRecord>();
     
+    // grid layout for sudoku grid
     GridLayout myButtonLayout = new GridLayout(NUM_IN_A_ROW,NUM_IN_A_COLUMN);
     
-
+ // instance of GameData class, which contains specific data about the game
+	private GameData current_game = new GameData(0);
+	
     public SudokuGame() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -95,6 +97,7 @@ public class SudokuGame extends JFrame {
         }
     }
 
+    // GUI settings created by Eclipse after menus, buttons, and menuItems were modified in Design state 
     private void jbInit() throws Exception {
         this.setJMenuBar(menuBar);
         this.getContentPane().setLayout(null);
@@ -139,8 +142,6 @@ public class SudokuGame extends JFrame {
             }
         });
 
-
-        //Modify for other menus -- menuHelpAbout.addActionListener( new ActionListener() { public void actionPerformed( ActionEvent ae ) { helpAbout_ActionPerformed( ae ); } } );
         jButtonUndo.setText("Undo");
         jButtonUndo.setBounds(new Rectangle(175, 330, 75, 21));
         jButtonUndo.addActionListener(buttonListener);
@@ -167,7 +168,6 @@ public class SudokuGame extends JFrame {
         menuHelp.add(menuHelpContents);
         menuBar.add(menuHelp);
 
-
         // Setting a grid layout to the JPanel )Layout manager has to be defined)
         this.getContentPane().add(jButtonShowSolution, null);
         this.getContentPane().add(jButtonCheckSolution, null);
@@ -178,20 +178,20 @@ public class SudokuGame extends JFrame {
         this.getContentPane().add(jButtonCheckSolution, null);
         
         
-        // Setting borders, gap and layout for jpanel:
+        // Sets borders, gap and layout for JPanel:
         jPanel1.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
-         //Set up the horizontal gap value for buttons:
+         //Sets up the horizontal gap value for buttons:
         myButtonLayout.setHgap(3);
-         //Set up the vertical gap value for buttons:
+         //Sets up the vertical gap value for buttons:
         myButtonLayout.setVgap(3);
-        // Set the layout as myButtonLayout: 
-        jPanel1.setLayout(myButtonLayout);  ///  KEEP IT TOGETHER AND SET THE LAYOUT TO THE GRIDLAYOUT YOU JUST MADE
+        // Sets the layout as myButtonLayout: 
+        jPanel1.setLayout(myButtonLayout); 
         
-
+        //Sets background color for JPanel and retrieves icon for JFrame
         jPanel1.setBackground(Color.white);
         this.setIconImage(new ImageIcon(imgURL).getImage());
 
-
+        //creates an array of JButtons
         for (int i = 0; i < NUM_OF_BUTTOMS_IN_ARRAY; i++) {
             btnarray[i] = new JButton();
             btnarray[i].addActionListener(arrayButtonListener);
@@ -204,19 +204,22 @@ public class SudokuGame extends JFrame {
     }
     
     
-
+    //determines whether the About frame is open or not
     public static void unsetAboutExists() {
         aboutExists = false;
     }
-
+    
+    //accessor for row numbers
     public int getRowNumberAccessed() {
         return rowNumberAccessed;
     }
-
+    
+    //accessor for column numbers
     public int getColNumberAccessed() {
         return colNumberAccessed;
     }
-
+    
+    //main method, and properties of JFrame (visibility, resizing, etc)
     public static void main(String[] args) {
         SudokuGame sudokuGame = new SudokuGame();
         sudokuGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -226,7 +229,8 @@ public class SudokuGame extends JFrame {
         sudokuGame.setVisible(true);
     }
     
-    
+    //ActionListener for newGame option, which loads skillLevelSelection frame that will allow user to select a level, and
+    	//based upon that level, a puzzle is generated
     void newGame_ActionPerformed(ActionEvent e) {
         
         skillLevelSelection = new SkillLevelSelection(this);
@@ -236,9 +240,10 @@ public class SudokuGame extends JFrame {
         skillLevelSelection.setVisible(true); 
         
         System.out.println("New game clicked");
-
+        
     }
 
+    //ActionListener for loadGame option, which calls loadGame method in GameData class and loads a game that the user chooses
     void loadGame_ActionPerformed(ActionEvent e) {
     	
         currentArrayOfNumbers = current_game.loadGame();
@@ -246,20 +251,28 @@ public class SudokuGame extends JFrame {
     	System.out.println("Load game clicked");
     }
 
+    //ActionListener for saveGame option, which calls saveGame method in GameData class and saves the game into an individual text file
     void saveGame_ActionPerformed(ActionEvent e) {
     	try {
 			current_game.saveGame(currentArrayOfNumbers);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
     	System.out.println("Save game clicked");
     }
 
-    void fileExit_ActionPerformed(ActionEvent e) {     
-        System.exit(0);
+    //exits the program
+    void fileExit_ActionPerformed(ActionEvent e) {
+    	try {
+			if(current_game.saveGame(currentArrayOfNumbers))
+				System.exit(0);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
 
+    //helps the
     private void helpAbout_ActionPerformed(ActionEvent e) {
         System.out.println("About clicked");
         if (aboutExists == false) {

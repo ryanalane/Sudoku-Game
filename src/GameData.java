@@ -112,7 +112,7 @@ public class GameData {
 		save_game_id = new_save_game_id;
 	}
 	
-	public void saveGame(int[][] current_square_array) throws IOException {
+	public boolean saveGame(int[][] current_square_array) throws IOException {
 		// Method for saving the game
 		int answer = JOptionPane.showConfirmDialog(null, "Do you want to save this file?"); 
 		if (answer==0)
@@ -151,7 +151,10 @@ public class GameData {
 		}
 		new_saved_game.close();
 		JOptionPane.showMessageDialog(null, "Game " + Integer.toString(getSaveGameId()) + " was saved");
-	}
+		} else if(answer == 2){
+			return false;
+		}
+		return true;
 	}
 	public int[][] loadGame() {
 		// Method for loading the game
@@ -165,15 +168,17 @@ public class GameData {
 				jfc.setCurrentDirectory(f);
 				
 				jfc.setFileFilter(new TextFileFilter());
-				jfc.showOpenDialog(null);
-				Scanner saved_game = new Scanner(jfc.getSelectedFile());
-				setSaveGameId(saved_game.nextInt());
-				setDifficultyLevelId(saved_game.nextInt());
-				setGeneratedSolutionId(saved_game.nextInt());
-				for (int i = 0; i < 81; i++) {
-					int row_id = SquareData.getRowId(i);
-					int col_id = SquareData.getColId(i);
-					current_square_array[row_id][col_id] = saved_game.nextInt();
+				int response = jfc.showOpenDialog(null);
+				if(response == 0) {
+					Scanner saved_game = new Scanner(jfc.getSelectedFile());
+					setSaveGameId(saved_game.nextInt());
+					setDifficultyLevelId(saved_game.nextInt());
+					setGeneratedSolutionId(saved_game.nextInt());
+					for (int i = 0; i < 81; i++) {
+						int row_id = SquareData.getRowId(i);
+						int col_id = SquareData.getColId(i);
+						current_square_array[row_id][col_id] = saved_game.nextInt();
+					}
 				}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
