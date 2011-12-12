@@ -240,6 +240,7 @@ public class SudokuGame extends JFrame {
     }
 
     void loadGame_ActionPerformed(ActionEvent e) {
+    	
         currentArrayOfNumbers = current_game.loadGame();
         loadGUI();
     	System.out.println("Load game clicked");

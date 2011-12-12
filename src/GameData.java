@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 
@@ -160,7 +161,22 @@ public class GameData {
 	}
 	public int[][] loadGame() {
 		// Method for loading the game
+		
+		JFileChooser jfc = new JFileChooser();
+			try
+			{
+				File f = new File(new File(".").getCanonicalPath());
+				jfc.setCurrentDirectory(f);
+				
+				}
+				catch (IOException except)
+				{
+					System.out.println("Unable to set current directory!");
+				}
+				jfc.setFileFilter(new TextFileFilter());
+				int result = jfc.showOpenDialog(null);
 		int[][] current_square_array = new int[9][9];
+		
 		try {
 			Scanner saved_game = new Scanner(new File("saved_games/game_1.txt"));
 			setSaveGameId(saved_game.nextInt());
@@ -183,4 +199,17 @@ public class GameData {
 	GameData(int new_difficulty_level_id) {
 		generateNewSolution(new_difficulty_level_id);
 	}
+	private class TextFileFilter extends javax.swing.filechooser.FileFilter
+  	{
+  		public boolean accept(File f)
+  		{
+  			return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+  			
+  		}
+  		public String getDescription()
+  		{
+  			return "Text Files(*.txt)";
+  			
+  		}
+  	}
 }
