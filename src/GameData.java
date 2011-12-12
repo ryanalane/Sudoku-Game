@@ -10,7 +10,6 @@ import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-
 public class GameData {
 	private boolean has_duplicates = false;
 	static private String[] difficulty_levels = {"Beginner", "Intermediate", "Advanced"};
@@ -68,7 +67,6 @@ public class GameData {
 	private int difficulty_level_id = 0;
 	private int generated_solution_id = 0;
 	private int save_game_id = 0;
-	private SquareData[] squares = new SquareData[81];
 	
 	// GameData Methods
 	public boolean getHasDuplicates() {
@@ -102,12 +100,6 @@ public class GameData {
 	}
 	public ArrayList<Integer> getGivenValues() {
 		return given_values.get(getDifficultyLevelId()).get(getGeneratedSolutionId());
-	}
-	public SquareData[] getSquares() {
-		return squares;
-	}
-	public SquareData getSquare(int square_id) {
-		return squares[square_id];
 	}
 	public String getDifficultyLevel() {
 		return difficulty_levels[getDifficultyLevelId()];
