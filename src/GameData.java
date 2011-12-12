@@ -125,6 +125,7 @@ public class GameData {
 		int answer = JOptionPane.showConfirmDialog(null, "Do you want to save this file?"); 
 		if (answer==0)
 		{
+			
 		if (getSaveGameId() == 0) {
 			File saved_game_dir = new File("saved_games/");
 			FilenameFilter file_filter = new FilenameFilter() {
@@ -157,6 +158,7 @@ public class GameData {
             new_saved_game.write(" ");
 		}
 		new_saved_game.close();
+		JOptionPane.showMessageDialog(null, "Game " + Integer.toString(getSaveGameId()) + " was saved");
 	}
 	}
 	public int[][] loadGame() {
