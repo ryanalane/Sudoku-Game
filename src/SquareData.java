@@ -1,3 +1,5 @@
+// Developed by Ryan Lane
+
 public final class SquareData {
 	static private int[][] sector_values = new int[81][3];
 	static {

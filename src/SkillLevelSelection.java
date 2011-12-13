@@ -1,39 +1,26 @@
+//Developed by Sylvia Barnai
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.net.URL;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
-
 public class SkillLevelSelection extends JFrame implements ActionListener {
     private JButton jButton1 = new JButton();
     private JLabel jLabel1 = new JLabel();
     private JButton jButton2 = new JButton();
     private JButton jButton3 = new JButton();
-    
-    
-   public SudokuGame parent;
 
-    public SkillLevelSelection(SudokuGame parent) {
-        super("Skill Level Selection");
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            jbInit();
-            this.parent = parent;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    public SudokuGame parent;
+    // Creates GUI
     private void jbInit() throws Exception {
         this.getContentPane().setLayout( null );
         this.setSize(new Dimension(273, 193));
@@ -61,27 +48,35 @@ public class SkillLevelSelection extends JFrame implements ActionListener {
         
     }
 
+    // Reference passed to SudokuGame class instance
+
+    public SkillLevelSelection(SudokuGame parent) {
+        super("Skill Level Selection");
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            jbInit();
+            this.parent = parent;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ActionPerformed method for selecting skill level
+
     public void actionPerformed(ActionEvent e) {
         int level = 0;
-        if (e.getActionCommand()== "Beginner")
-        {
-        System.out.println("Beginner clicked");
-        level = 0;
-        }
-        else if (e.getActionCommand()== "Intermediate")
-        {
-        System.out.println("Intermediate clicked");
-        level = 1;
-        }
-        else
-        {
-        level = 2;
-        System.out.println("Advanced clicked");
+        if (e.getActionCommand() == "Beginner") {
+            System.out.println("Beginner clicked");
+            level = 0;
+        } else if (e.getActionCommand() == "Intermediate") {
+            System.out.println("Intermediate clicked");
+            level = 1;
+        } else {
+            level = 2;
+            System.out.println("Advanced clicked");
         }
         parent.setLevelSelected(level);
         parent.skillLevelChosen();
         this.dispose();
     }
-
-   
 }
