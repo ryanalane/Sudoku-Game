@@ -1,11 +1,11 @@
 Sudoku Game README
 
 Developed by:
-Sylva Barnai and Ryan Lane
+Sylvia Barnai and Ryan Lane
 sb_pink_girl@yahoo.com
 ryan@ryanalane.com
 
-This README was published Janurary 11th, 2012.
+This README was published on Janurary 11th, 2012.
 
 Java Eclipse Project
 
